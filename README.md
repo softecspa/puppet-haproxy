@@ -56,7 +56,7 @@ Create a backend named articolo_http with options httpclose and forwardfor
 
         haproxy::backend {'articolo_http':
           options   => [ 'httpclose' , 'forwardfor' ],
-
+          mode      => 'http',
         }
 
 #### Add appsession
@@ -75,25 +75,25 @@ If we want to manage persistent session, we can define one or more appsession. T
 Now we add server that compose the backend: articolo03 and articolo04. We add some option to check server availability
 
         haproxy::backend::server {'articolo03':
-            check           => true #(true by default),
-            backend_name    => 'articolo_http',
-            bind            => '192.168.1.1:80',
-            inter           => '2s',
-            downinter       => '1s',
-            fastinter       => '1s',
-            rise            => 2,
-            fall            => 3,
+          check           => true #(true by default),
+          backend_name    => 'articolo_http',
+          bind            => '192.168.1.1:80',
+          inter           => '2s',
+          downinter       => '1s',
+          fastinter       => '1s',
+          rise            => 2,
+          fall            => 3,
         }
 
         haproxy::backend::server {'articolo04':
-            check           => true #(true by default),
-            backend_name    => 'articolo_http',
-            bind            => '192.168.1.2:80',
-            inter           => '2s',
-            downinter       => '1s',
-            fastinter       => '1s',
-            rise            => 2,
-            fall            => 3,
+          check           => true #(true by default),
+          backend_name    => 'articolo_http',
+          bind            => '192.168.1.2:80',
+          inter           => '2s',
+          downinter       => '1s',
+          fastinter       => '1s',
+          rise            => 2,
+          fall            => 3,
         }
 
 #### Add header in request or response
@@ -101,16 +101,16 @@ Now we add server that compose the backend: articolo03 and articolo04. We add so
 Add header name X-HaProxy-Id to the request.
 
         haproxy::backend::add_header {'X-HaProxy-Id':
-            request => true, #(if response => true is used, header will be added on respose)
-            value   => 'botolo01',
-            backend_name    => 'articolo_http',
+          request         => true, #(if response => true is used, header will be added on respose)
+          value           => 'botolo01',
+          backend_name    => 'articolo_http',
         }
 
 Add the same header on the response
         haproxy::backend::add_header {'X-HaProxy-Id':
-          response  => true, #(response and request cannot be used in conjuction)
-          value     => 'botolo01',
-          backend_name    => 'articolo_http',
+          response      => true, #(response and request cannot be used in conjuction)
+          value         => 'botolo01',
+          backend_name  => 'articolo_http',
         }
 
 ## Create a Frontend
@@ -121,11 +121,12 @@ Create a frontend that listen on 192.168.1.1:80 and 172.16.1.1:80 that use as de
           fe_name           => '' #if not defined <name> will be used,
           bind              => [ '192.168.1.1:80' , '172.16.1.1:80' ],
           default_backend   => 'articolo_http',
-          options           => [''
+          options           => [ 'foo' , 'bar'],
+          mode              => 'http'
         }
 
 #### Capture header and cookie
-In the defined frontend we want to capture some header or header that will be logged
+In the defined frontend we want to capture some cookies or header that will be logged
 
         haproxy::frontend::capture {'JSESSIONID=':
           frontend_name => 'http':
@@ -135,12 +136,12 @@ In the defined frontend we want to capture some header or header that will be lo
 
         haproxy::frontend::capture {'X-Backend-Id':
           frontend_name => 'http':
-          type      => 'response header',
-          length    => 10
+          type          => 'response header',
+          length        => 10
         }
 
         haproxy::frontend::capture {'X-Varnish-Id':
           frontend_name => 'http':
-          type      => 'response header',
-          length    => 10
+          type          => 'response header',
+          length        => 10
         }

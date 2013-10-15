@@ -8,4 +8,4 @@ This module can be used in two ways:
  - Second: you can use params of classes and his defines to construct a conf file with fragments.
  
 Example 1
-==
+===============

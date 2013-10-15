@@ -7,6 +7,12 @@
 # [*monitor*]
 #   enable monitor of process haproxy and hastats
 #
+# [*static_config*]
+#   if this is used, all other parameters will be ignored and static file is pushed. File to be pushed will be retrieved under this convention:
+#     * haproxy.conf_$fqdn
+#     * haproxy-conf_$cluster
+#     * haproxy.conf
+#
 # [*log_file*]
 #   false do not log on file. otherwise pathfile (syslog_facility become mandatory). If file enable logrotate
 #

@@ -45,4 +45,20 @@
 #
 # [*enable_hatop*]
 #   install hatop and start service as root
+#
+# [*enable_stats*]
+#   Abilita pagina di stats
+#
+# [*stats_user*]
+#   stats username
+#
+# [*stats_pass*]
+#  stats password
+#
+if ($log_file!='') {
+  include haproxy::logrotate
+}
 
+if ($monitor) {
+  include haproxy::monitoring
+}

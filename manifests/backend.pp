@@ -13,11 +13,5 @@
 # [*appsession*]
 #   hash for appsession to use
 #
-# [*add_request_header*]
-#   hash of request headers to add
-#
-# [*servers]
-#   hash of address:port anche checks options
-#
 # [*options*]
 #   array of options

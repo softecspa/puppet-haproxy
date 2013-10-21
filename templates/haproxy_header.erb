@@ -1,0 +1,21 @@
+global
+    log <%= scope.lookupvar('haproxy::logserver') -%> <%= scope.lookupvar('haproxy::syslog_facility') %>
+    stats socket <%= scope.lookupvar('haproxy::params::sock') %> mode 0600 level admin
+    maxconn 4096
+    user <%= scope.lookupvar('haproxy::haproxy_user_group') %>
+    group <%= scope.lookupvar('haproxy::haproxy_user_group') %>
+    daemon
+
+defaults
+    log global
+    mode <%= scope.lookupvar('haproxy::default_mode') %>
+<% scope.lookupvar('haproxy::array_options').each do |option| -%>
+<% if option != '' -%>
+    option <%= option %>
+<% end -%>
+<% end -%>
+    retries <%= scope.lookupvar('haproxy::retries') %>
+    maxconn <%= scope.lookupvar('haproxy::maxconn') %>
+    contimeout  <%= scope.lookupvar('haproxy::contimeout') %>
+    clitimeout  <%= scope.lookupvar('haproxy::clitimeout') %>
+    srvtimeout  <%= scope.lookupvar('haproxy::srvtimeout') %>

@@ -1,0 +1,11 @@
+
+frontend <%= frontend_name -%>
+<% array_bind.each do |bind| %>
+    bind <%= bind -%>
+<% end %>
+<% scope.lookupvar('array_options').each do |option| -%>
+<% if option != '' -%>
+    option <%= option %>
+<% end -%>
+<% end -%>
+    default_backend <%= default_backend %>

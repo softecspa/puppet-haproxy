@@ -7,11 +7,32 @@
 # [*be_name*]
 #  if name isn't defined
 #
-# [*template*]
+# [*file_template*]
 #   if customized template should be used. Otherwise check backend-hostname-be_name
-#
-# [*appsession*]
-#   hash for appsession to use
 #
 # [*options*]
 #   array of options
+#
+define haproxy::backend (
+  $be_name        = '',
+  $file_template  = 'haproxy/haproxy_backend_header.erb',
+  $options        = '',
+) {
+
+  $backend_name = $be_name? {
+    ''      => $name,
+    default => $be_name
+  }
+
+  $array_options = is_array($options)? {
+    true  => $options,
+    false => [ $options ]
+  }
+
+  concat_fragment {"haproxy+002-${name}-001.tmp":
+    content => template($file_template)
+  }
+
+}
+
+

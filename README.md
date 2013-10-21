@@ -9,16 +9,14 @@ This module can be used in two ways:
  
 # Example 1
 
-In this case, we install haproxy on node botolo01 (that is part of cluster named botolo). We put the static configuration file under one of these files:
- - puppet:///modules/haproxy/haproxy_botolo01 (customized configuration for the single node botolo01)
- - puppet:///modules/haproxy/haproxy_botolo   (for instance, if we have a HA configuration managed with heartbeat, we use the same configuration for every node in the cluster)
- - puppet:///modules/haproxy/haproxy If no files is matched this file will be pushed. Configuration is the same on every machine.
+In this case, we install haproxy on node botolo01 (that is part of cluster named botolo). We put static configuration file under:
+ - puppet:///modules/haproxy/haproxy_botolo01
 
         class {'haproxy':
           enabled         => true,
           running         => true, # (true by default)
           monitor         => true, # (false by default)
-          static_config   => true  # (true by default)
+          static_config   => 'puppet:///modules/haproxy/haproxy_botolo01'  # (true by default)
         }
 
 # Example 2
@@ -32,7 +30,6 @@ When we define haproxy class, we can specify all global options
 
         class {'haproxy':
           log_file          => '/var/log/haproxy/haproxy.log',
-          syslog_facility   => 'local1',
           enable_stats      => true,
           enable_hatop      => true,
           maxconn           => 2000,
@@ -49,6 +46,16 @@ When we define haproxy class, we can specify all global options
  - log_file: false by Default. It may also be a path to the logfile. if this params is a path, syslog_facility become mandatory, this module also enable a syslog facility and redirect correct logs.
  - enable_stats: if true, stats will be enabled and protected with stats_user:stats_pass
  - Other params are described in HaProxy official documentation
+
+## Create ACL
+ACL can be created at frontend, backend and listen. Define's name of one of this must be passed as parameter.
+
+        haproxy::acl {'acl_name':
+          condition     => 'dst 192.168.1.101',
+          backend_name  => 'articolo_http',
+          frontend_name => '',
+          listen_name   => '',
+        }
 
 ## Create a Backend
 
@@ -144,4 +151,13 @@ In the defined frontend we want to capture some cookies or header that will be l
           frontend_name => 'http':
           type          => 'response header',
           length        => 10
+        }
+
+#### Use backend
+add the use_backend directive, eventually with ACL matching
+
+        haproxy::frontend::use_backend {'articolo_http':
+          frontend_name => 'http',
+          backend_name  => 'articolo_http',
+          if            => 'acl_name'       # resource Haproxy::Acl['acl_name'] must exists.
         }

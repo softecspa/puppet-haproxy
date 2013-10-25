@@ -16,6 +16,9 @@
 # [*defaul_backend*]
 #   default backend to use
 #
+# [*mode*]
+#   haproxy mode directive. Can be http or tcp. Default tcp
+#
 # [*options*]
 #   array of options
 #
@@ -24,8 +27,13 @@ define haproxy::frontend (
   $default_backend,
   $fe_name          = '',
   $file_template    = 'haproxy/haproxy_frontend_header.erb',
+  $mode             = 'tcp',
   $options          = ''
 ) {
+
+  if ($mode != 'http') and ($mode != 'tcp') {
+    fail ('mode paramater must be http or tcp')
+  }
 
   $frontend_name = $fe_name?{
     ''      => $name,

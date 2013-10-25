@@ -87,7 +87,7 @@ class haproxy (
   $srvtimeout       = 50000,
   $retries          = 2,
   $srvtimeout       = 50000,
-  $default_mode     = 'http',
+  $default_mode     = 'tcp',
   $options          = '',
   $stats_user       = 'haproxystats',
   $stats_pass       = '',

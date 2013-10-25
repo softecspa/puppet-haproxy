@@ -1,9 +1,17 @@
 class haproxy::config {
 
+  file {"${haproxy::params::config_dir}/haproxy.cfg":
+    ensure  => present,
+    mode    => 664,
+    owner   => 'root',
+    group   => 'root',
+    notify  => $haproxy::params::service_name,
+    require => Concat_build['haproxy']
+  }
+
   concat_build { 'haproxy':
     order   => ['*.tmp'],
     target  => "${haproxy::params::config_dir}/haproxy.cfg",
-    notify  => $haproxy::params::service_name,
   }
 
   concat_fragment { 'haproxy+001.tmp':

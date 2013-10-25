@@ -1,6 +1,6 @@
 
 backend <%= backend_name %>
-mode <%= mode %>
+    mode <%= mode -%>
 <% scope.lookupvar('array_options').each do |option| -%>
 <% if option != '' -%>
     option <%= option %>

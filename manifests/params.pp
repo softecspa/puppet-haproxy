@@ -5,4 +5,5 @@ class haproxy::params {
   $sock               = '/var/run/haproxy/haproxy.sock'
   $config_dir         = '/etc/haproxy/'
   $default_config     = '/etc/default/haproxy'
+  $service_name       = 'haproxy'
 }

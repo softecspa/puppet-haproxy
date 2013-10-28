@@ -5,17 +5,19 @@ class haproxy::config {
     mode    => 664,
     owner   => 'root',
     group   => 'root',
-    notify  => $haproxy::params::service_name,
+    notify  => Service[$haproxy::params::service_name],
     require => Concat_build['haproxy']
   }
 
   concat_build { 'haproxy':
     order   => ['*.tmp'],
     target  => "${haproxy::params::config_dir}/haproxy.cfg",
+    notify  => Service[$haproxy::params::service_name],
   }
 
   concat_fragment { 'haproxy+001.tmp':
-    content => template('haproxy/haproxy_header.erb')
+    content => template('haproxy/haproxy_header.erb'),
+    notify  => Service[$haproxy::params::service_name],
   }
 
   $enabled = $haproxy::service_ensure? {

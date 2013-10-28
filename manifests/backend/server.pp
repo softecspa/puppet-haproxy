@@ -83,6 +83,7 @@ define haproxy::backend::server (
   }
 
   concat_fragment {"haproxy+002-${backend_name}-004-${name}.tmp":
-    content => template($file_template)
+    content => template($file_template),
+    notify  => Service[$haproxy::params::service_name],
   }
 }

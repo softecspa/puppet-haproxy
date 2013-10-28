@@ -40,7 +40,8 @@ define haproxy::backend::appsession (
   }
 
   concat_fragment{"haproxy+002-${backend_name}-002-${name}.tmp":
-    content => template($file_template)
+    content => template($file_template),
+    notify  => Service[$haproxy::params::service_name],
   }
 
 }

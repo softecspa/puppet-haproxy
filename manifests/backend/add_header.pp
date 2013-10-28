@@ -49,7 +49,6 @@ define haproxy::backend::add_header (
 
   concat_fragment {"haproxy+002-${backend_name}-003-${name}.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name],
   }
 
 

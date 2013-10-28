@@ -46,6 +46,5 @@ define haproxy::frontend::capture (
 
   concat_fragment {"haproxy+003-${frontend_name}-002-${name}.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name],
   }
 }

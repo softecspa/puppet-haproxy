@@ -17,7 +17,6 @@ class haproxy::config {
 
   concat_fragment { 'haproxy+001.tmp':
     content => template('haproxy/haproxy_header.erb'),
-    notify  => Service[$haproxy::params::service_name],
   }
 
   $enabled = $haproxy::service_ensure? {

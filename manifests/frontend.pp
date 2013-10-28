@@ -57,7 +57,6 @@ define haproxy::frontend (
 
   concat_fragment {"haproxy+003-${name}-001.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name],
   }
 
 

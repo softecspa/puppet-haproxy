@@ -156,7 +156,8 @@ class haproxy (
 
   if $log_dir != '' {
     rsyslog::facility { 'haproxy':
-      log_file      => "${log_dir}/haproxy.log",
+      log_file      => "haproxy.log",
+      logdir        => $log_dir,
       file_template => 'haproxy/rsyslog_facility.erb',
       create        => '644 syslog adm'
     }

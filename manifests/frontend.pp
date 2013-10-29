@@ -69,7 +69,7 @@ define haproxy::frontend (
         checkname             => 'check_nrpe_1arg',
         service_description   => "HaProxy frontend ${frontend_name}",
         notifications_enabled => 0,
-        target                => "haproxy_stats_${::hostname}",
+        target                => "haproxy_stats_${::hostname}.cfg",
         params                => "!check_haproxy_${frontend_name}",
         tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
       }

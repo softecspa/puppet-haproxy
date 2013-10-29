@@ -59,7 +59,7 @@ define haproxy::listen (
         checkname             => 'check_nrpe_1arg',
         service_description   => "HaProxy listen ${ls_name}",
         notifications_enabled => 0,
-        target                => "haproxy_stats_${::hostname}",
+        target                => "haproxy_stats_${::hostname}.cfg",
         params                => "!check_haproxy_${ls_name}",
         tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
       }

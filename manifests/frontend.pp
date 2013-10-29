@@ -28,7 +28,8 @@ define haproxy::frontend (
   $fe_name          = '',
   $file_template    = 'haproxy/haproxy_frontend_header.erb',
   $mode             = 'tcp',
-  $options          = ''
+  $options          = '',
+  $monitor          = true,
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -59,5 +60,19 @@ define haproxy::frontend (
     content => template($file_template),
   }
 
+  if $monitor {
+    if $haproxy::monitor {
+      nrpe::check_haproxy {$frontend_name :}
 
+      @@nagios::check { "${frontend_name}-${::hostname}":
+        host                  => $hostname,
+        checkname             => 'check_nrpe_1arg',
+        service_description   => "HaProxy frontend ${frontend_name}",
+        notifications_enabled => 0,
+        target                => "haproxy_stats_${::hostname}",
+        params                => "!check_haproxy_${frontend_name}",
+        tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
+      }
+    }
+  }
 }

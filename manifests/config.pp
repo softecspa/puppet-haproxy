@@ -1,5 +1,14 @@
 class haproxy::config {
 
+  if $haproxy::log_dir != false {
+    file {$haproxy::log_dir :
+      ensure  => directory,
+      mode    => 664,
+      owner   => 'syslog',
+      group   => 'adm',
+    }
+  }
+
   file {"${haproxy::params::config_dir}/haproxy.cfg":
     ensure  => present,
     mode    => 664,

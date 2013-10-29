@@ -12,8 +12,8 @@
 #
 # [*file_template*]
 #
-# [*log_file*]
-#   false do not log on file. otherwise pathfile (syslog_facility become mandatory). If file enable logrotate
+# [*log_dir*]
+#   false do not log on file. otherwise path of directory where haproxy should log (syslog_facility become mandatory). If file enable logrotate
 #
 # [*file_template*]
 #   template used to override default configuration
@@ -75,7 +75,7 @@
 class haproxy (
   $service_ensure   = running,
   $service_enable   = true,
-  $log_file         = '',
+  $log_dir          = '/var/log/haproxy',
   $logserver        = '127.0.0.1',
   $file_template    = '',
   $syslog_facility  = 'local1',
@@ -98,8 +98,8 @@ class haproxy (
 
   include haproxy::params
 
-  if $log_file != '' {
-    validate_absolute_path($log_file)
+  if $log_dir != false {
+    validate_absolute_path($log_dir)
   }
 
   validate_bool($enable_stats)
@@ -154,11 +154,11 @@ class haproxy (
     false => 'haproxy'
   }
 
-  if $log_file != '' {
+  if $log_dir != '' {
     rsyslog::facility { 'haproxy':
-      log_file       => $log_file,
-      file_template  => 'haproxy/rsyslog_facility.erb',
-      logrotate      => false,
+      log_file      => "${log_dir}/haproxy.log",
+      file_template => 'haproxy/rsyslog_facility.erb',
+      create        => '644 syslog adm'
     }
   }
 
@@ -176,16 +176,4 @@ class haproxy (
       value   => 1
     }
   }
-
-  /*if ($log_file!='') {
-    include haproxy::logrotate
-    Class['haproxy::service'] ->
-    Class['haproxy::logrotate']
-  }
-
-  if ($monitor) {
-    include haproxy::monitoring
-    Class['haproxy::service'] ->
-    Class['haproxy::monitoring']
-  }*/
 }

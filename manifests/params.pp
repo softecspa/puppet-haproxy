@@ -6,4 +6,5 @@ class haproxy::params {
   $config_dir         = '/etc/haproxy/'
   $default_config     = '/etc/default/haproxy'
   $service_name       = 'haproxy'
+  $archive_logdir     = '/var/log'
 }

@@ -24,7 +24,8 @@ define haproxy::listen (
   $listen_name          = '',
   $file_template    = 'haproxy/haproxy_listen_header.erb',
   $mode             = 'tcp',
-  $options          = ''
+  $options          = '',
+  $monitor          = true,
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -47,8 +48,21 @@ define haproxy::listen (
 
   concat_fragment {"haproxy+004-${name}-001.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name],
   }
 
+  if $monitor {
+    if $haproxy::monitor {
+      nrpe::check_haproxy {$ls_name :}
 
+      @@nagios::check { "${ls_name}-${::hostname}":
+        host                  => $hostname,
+        checkname             => 'check_nrpe_1arg',
+        service_description   => "HaProxy listen ${ls_name}",
+        notifications_enabled => 0,
+        target                => "haproxy_stats_${::hostname}",
+        params                => "!check_haproxy_${ls_name}",
+        tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
+      }
+    }
+  }
 }

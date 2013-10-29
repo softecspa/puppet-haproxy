@@ -35,7 +35,6 @@ define haproxy::frontend::acl (
 
   concat_fragment { "haproxy+003-${frontend_name}-003-${name}.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name],
   }
 
   if ($use_backend!='') {

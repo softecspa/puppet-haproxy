@@ -21,6 +21,7 @@ define haproxy::backend (
   $file_template  = 'haproxy/haproxy_backend_header.erb',
   $options        = '',
   $mode           = 'tcp',
+  $monitor        = true,
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -39,9 +40,23 @@ define haproxy::backend (
 
   concat_fragment {"haproxy+002-${name}-001.tmp":
     content => template($file_template),
-    notify  => Service[$haproxy::params::service_name]
   }
 
+  if $monitor {
+    if $haproxy::monitor {
+      nrpe::check_haproxy {$backend_name :}
+
+      @@nagios::check { "${backend_name}-${::hostname}":
+        host                  => $hostname,
+        checkname             => 'check_nrpe_1arg',
+        service_description   => "HaProxy backend ${backend_name}",
+        notifications_enabled => 0,
+        target                => "haproxy_stats_${::hostname}",
+        params                => "!check_haproxy_${backend_name}",
+        tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
+      }
+    }
+  }
 }
 
 

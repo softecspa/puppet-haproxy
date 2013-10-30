@@ -21,6 +21,7 @@
 #
 define haproxy::listen (
   $bind,
+  $port,
   $listen_name          = '',
   $file_template    = 'haproxy/haproxy_listen_header.erb',
   $mode             = 'tcp',
@@ -42,8 +43,8 @@ define haproxy::listen (
     default => [ $options ],
   }
 
-  if $bind !~ /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}(-[0-9]{1,5})?$/ {
-    fail('invalid ip_address:port or ip_address::portrange value present in bind')
+  if $bind !~ /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/ {
+    fail('invalid ip_address value present in bind')
   }
 
   concat_fragment {"haproxy+004-${name}-001.tmp":

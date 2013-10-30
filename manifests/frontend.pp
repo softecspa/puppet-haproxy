@@ -24,6 +24,7 @@
 #
 define haproxy::frontend (
   $bind,
+  $port,
   $default_backend,
   $fe_name          = '',
   $file_template    = 'haproxy/haproxy_frontend_header.erb',
@@ -52,8 +53,8 @@ define haproxy::frontend (
   }
 
   $string_binds = inline_template('<% array_bind.each do |bind| -%><%= bind %> <% end -%>')
-  if $string_binds !~ /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}\ )+$/ {
-    fail('invalid ip_address:port value present in bind')
+  if $string_binds !~ /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\ )+$/ {
+    fail('invalid ip_address value present in bind')
   }
 
   concat_fragment {"haproxy+003-${name}-001.tmp":

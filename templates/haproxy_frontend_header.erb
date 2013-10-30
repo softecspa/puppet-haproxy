@@ -2,7 +2,7 @@
 frontend <%= frontend_name %>
     mode <%= mode -%>
 <% array_bind.each do |bind| %>
-    bind <%= bind -%>
+    bind <%= bind -%><% if port != '' -%>:<%= port -%><% end -%>
 <% end %>
 <% scope.lookupvar('array_options').each do |option| -%>
 <% if option != '' -%>

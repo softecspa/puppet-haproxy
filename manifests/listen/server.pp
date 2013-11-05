@@ -29,6 +29,8 @@
 # [*send_proxy*]
 #   True if the send_proxy directive must be added. Default: false
 #
+# [*check_port*]
+#   Port used to check backend
 define haproxy::listen::server (
   $listen_name,
   $bind,
@@ -43,6 +45,7 @@ define haproxy::listen::server (
   $backup       = false,
   $send_proxy   = false,
   $port         = '',
+  $check_port   = '',
 ) {
 
   if !defined(Haproxy::Listen[$listen_name]) {

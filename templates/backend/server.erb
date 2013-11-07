@@ -1,1 +1,1 @@
-    server <%= servername -%>    <%= bind_address -%> <% if backup -%> backup<% end -%><% if server_check -%> check inter <%= inter -%> downinter <%= downinter -%> fastinter <%= fastinter -%> rise <%= rise -%> fall <%= fall -%><% end -%><% if send_proxy -%> send_proxy <% end %>
+    server <%= servername -%>    <%= bind_address -%> <% if backup -%> backup<% end -%><% if server_check -%> check inter <%= inter -%> downinter <%= downinter -%> fastinter <%= fastinter -%> rise <%= rise -%> fall <%= fall -%><% end -%><% if send_proxy -%> send_proxy <% end %> weight <%= weight -%>

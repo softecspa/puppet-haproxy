@@ -43,6 +43,7 @@ define haproxy::backend::server (
   $backup       = false,
   $send_proxy   = false,
   $port         = '',
+  $weight       = '100',
 ) {
 
   if !defined(Haproxy::Backend[$backend_name]) {
@@ -64,6 +65,10 @@ define haproxy::backend::server (
 
   if !is_integer($fall) {
     fail('fall parameter must be an integer value')
+  }
+
+  if !is_integer($weight) {
+    fail('weight parameter must be an integer value')
   }
 
   if $inter !~ /[0-9]{1,3}s/ {

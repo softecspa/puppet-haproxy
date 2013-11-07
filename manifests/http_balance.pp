@@ -10,6 +10,7 @@ define haproxy::http_balance (
   $res_header_capture = '',
   $req_header_capture = '',
   $http_port          = '80',
+  $own_logfile        = false,
 ) {
 
   if !is_hash($backends) {
@@ -75,12 +76,13 @@ define haproxy::http_balance (
     create_resources(haproxy::backend::add_header, $add_request_header, {'backend_name' => $be_name, 'type' => 'req'})
   }
 
-  haproxy::frontend {'http':
+  haproxy::frontend {"frontend_${be_name}":
     bind            => $bind_addresses,
     port            => $http_port,
     default_backend => $be_name,
     options         => $array_fe_options,
     mode            => 'http',
+    own_logfile     => $own_logfile,
   }
 
   haproxy::backend::add_header { 'X-HaProxy-Id':
@@ -98,7 +100,7 @@ define haproxy::http_balance (
 
   if $cookie_capture != '' {
     haproxy::frontend::capture {$array_cookie_capture :
-      frontend_name => 'http',
+      frontend_name => "frontend_${be_name}",
       capture_type  => 'cookie',
       length        => 52,
     }
@@ -106,7 +108,7 @@ define haproxy::http_balance (
 
   if $res_header_capture != '' {
     haproxy::frontend::capture {$array_res_header_capture :
-      frontend_name => 'http',
+      frontend_name => "frontend_${be_name}",
       capture_type  => 'response header',
       length        => 10,
     }
@@ -114,7 +116,7 @@ define haproxy::http_balance (
 
   if $req_header_capture != '' {
     haproxy::frontend::capture {$array_req_header_capture :
-      frontend_name => 'http',
+      frontend_name => "frontend_${be_name}",
       capture_type  => 'request header',
       length        => 10,
     }

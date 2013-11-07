@@ -38,5 +38,5 @@ define haproxy::ftp_balance (
     monitor => false,
     port    => $passv_ports
   }
-  create_resources(haproxy::listen::server,$backends, {'listen_name' => "${be_name}_passv"})
+  create_resources(haproxy::listen::server,$backends, {'listen_name' => "${be_name}_passv", 'check_port' => $ftp_port})
 }

@@ -31,6 +31,7 @@ define haproxy::frontend (
   $mode             = 'tcp',
   $options          = '',
   $monitor          = true,
+  $own_logfile      = false,
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -75,5 +76,25 @@ define haproxy::frontend (
         tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
       }
     }
+  }
+
+  $facility_ensure = $haproxy::log_dir? {
+    ''      => 'absent',
+    default => $own_logfile? {
+      true  => 'present',
+      false => 'absent',
+    }
+  }
+
+  rsyslog::facility { "10-haproxy_${frontend_name}":
+    ensure        => $own_logfile ? {
+        true  => 'present',
+        false => 'absent',
+    },
+    log_file      => "haproxy_${frontend_name}.log",
+    logdir        => $haproxy::log_dir,
+    file_template => 'haproxy/rsyslog_facility_frontend.erb',
+    logrotate     => false,
+    rsyslog_tag   => $frontend_name,
   }
 }

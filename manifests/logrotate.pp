@@ -8,7 +8,7 @@
 #
 class haproxy::logrotate {
   logrotate::file { 'haproxy':
-    log           =>  "${haproxy::log_dir}/haproxy.log",
+    log           =>  "${haproxy::log_dir}/*.log",
     interval      =>  'daily',
     rotation      =>  '930',
     options       =>  [ 'missingok', 'compress', 'notifempty', 'sharedscripts' ],
@@ -18,6 +18,6 @@ class haproxy::logrotate {
     olddir_group  =>  'users',
     olddir_mode   =>  '655',
     create        =>  '640 syslog adm',
-    postrotate    =>  'invoke-rc.d haproxy reload',
+    postrotate    =>  'invoke-rc.d rsyslog reload',
   }
 }

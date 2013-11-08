@@ -69,9 +69,6 @@
 # [*nagios_hostname*]
 #   hostname of nagios server used for monitoring
 #
-# [*HA*]
-#   if true, installation must support bind on non local ip to work in HA mode
-#
 class haproxy (
   $service_ensure   = running,
   $service_enable   = true,
@@ -93,7 +90,6 @@ class haproxy (
   $stats_pass       = '',
   $monitor          = true,
   $nagios_hostname  = '',
-  $HA               = true,
 ) {
 
   include haproxy::params
@@ -173,10 +169,10 @@ class haproxy (
   Class['haproxy::config'] ->
   Class['haproxy::service']
 
-  if $HA {
-    sysctl::conf{'10-bind.conf':
-      key     => 'net.ipv4.ip_nonlocal_bind',
-      value   => 1
-    }
+
+  if defined(Class['heartbeat']) {
+    Class['heartbeat'] ->
+    Class['haproxy::service']
   }
+
 }

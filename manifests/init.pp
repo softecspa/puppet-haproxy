@@ -102,7 +102,6 @@ class haproxy (
   validate_bool($enable_hatop)
   validate_bool($monitor)
   validate_bool($service_enable)
-  validate_bool($HA)
 
   if ($service_ensure != false) and ($service_ensure != true) and ($service_ensure != 'running') and ($service_ensure != 'stopped') {
     fail ('service_ensure must be boolean or running|stopped')

@@ -11,6 +11,7 @@ define haproxy::smtp_balance (
     backends        => $backends,
     backend_name    => $backend_name,
     port            => $smtp_port,
+    backend_options => [ 'smtpchk' ],
   }
 
   if !defined(Augeas['smtp_local_bind']) {

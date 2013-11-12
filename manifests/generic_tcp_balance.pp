@@ -19,7 +19,9 @@
 define haproxy::generic_tcp_balance (
   $bind_addresses,
   $backends,
-  $backend_name   = '',
+  $backend_options  = '',
+  $frontend_options = '',
+  $backend_name     = '',
   $port,
 ) {
 
@@ -42,12 +44,15 @@ define haproxy::generic_tcp_balance (
     default => $backend_name
   }
 
-  haproxy::backend {$be_name :}
+  haproxy::backend {$be_name :
+    options => $backend_options
+  }
   create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $port})
 
   haproxy::frontend {"frontend_${be_name}" :
     bind            => $bind_addresses,
     default_backend => $be_name,
-    port            => $port
+    port            => $port,
+    options         => $frontend_options,
   }
 }

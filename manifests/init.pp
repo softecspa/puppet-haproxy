@@ -5,42 +5,31 @@
 # == Params
 #
 # [*service_ensure*]
-#   status of the service. Boolean or running|stopped. Default: true
+#   status of the service. Boolean or running|stopped. Default: running
 #
 # [*service_enable*]
 #   service enabled by default. Boolean. Default: true
 #
-# [*file_template*]
-#
 # [*log_dir*]
-#   false do not log on file. otherwise path of directory where haproxy should log (syslog_facility become mandatory). If file enable logrotate
+#   false do not log on file. otherwise path of directory where haproxy should log (syslog_facility become mandatory). If not false logrotate will be enabled. Default: /var/log/haproxy
+#
+# [*logserver*]
+#   syslog server address. Default: 127.0.0.1
 #
 # [*file_template*]
 #   template used to override default configuration
 #
 # [*syslog_facility*]
-#   facility to use for redirect rsyslog log
+#   facility used to log on rsyslog. Default: local1
 #
 # [*enable_stats*]
-#   enable stats page
+#   enable stats page. Default: true
 #
 # [*enable_hatop*]
-#   enable hatop by installing package and setting user/group
-#
-# [*enabled*]
-#   service must be enabled by default. Default: true
-#
-# [*running*]
-#   service must be running
+#   enable hatop by installing package and setting user/group to root. Default: true
 #
 # [*maxconn*]
 #   global maxconn
-#
-# [*default_mode*]
-#   default mode
-#
-# [*options*]
-#   default options array
 #
 # [*contimeout*]
 #   haproxy param. Default: 5000
@@ -51,17 +40,20 @@
 # [*srvtimeout*]
 #   haproxy param. Default: 50000
 #
-# [*enable_hatop*]
-#   install hatop and start service as root
+# [*retries*]
+#   haproxy param. Default: 3
 #
-# [*enable_stats*]
-#   Abilita pagina di stats
+# [*default_mode*]
+#   default mode of use. It can be tcp|http. Default: tcp
+#
+# [*options*]
+#   array of options to enable on global section. Default: ''
 #
 # [*stats_user*]
-#   stats username
+#   username to use for access stats. Default: haproxystats
 #
 # [*stats_pass*]
-#  stats password
+#  password to user for access stats
 #
 # [*monitor*]
 #   enable monitor of process haproxy and hastats

@@ -22,4 +22,15 @@ define haproxy::smtp_balance (
     }
   }
 
+  @@rsyslog::facility {'postfix-checks':
+    logdir          => '/var/log/haproxy_checks',
+    log_file        => 'mail.log',
+    file_template   => 'haproxy/rsyslog_facility_mail.erb',
+    logrotate       => true,
+    rotate          => 'daily',
+    retention_days  => '2',
+    create          => '640 syslog adm',
+    tag             => 'rsyslog_facility_haproxy_checks',
+  }
+
 }

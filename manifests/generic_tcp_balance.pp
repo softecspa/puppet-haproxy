@@ -1,3 +1,21 @@
+# = Define haproxy::generic_tcp_balance
+#
+#   This define creates a conjuction of frontend and backend to serve a generic tcp service specifiing ip address and port
+#
+# == Params
+#
+# [*bind_addresses*]
+#   array of address on which bind
+#
+# [*port*]
+#   port on wich addresses bind
+#
+# [*be_name*]
+#   backend's name. <name> will be used if it's not defined
+#
+# [*backends*]
+#   hash of backends to use. Hash can contain as key, all of params presents in haproxy::backend::server define
+#
 define haproxy::generic_tcp_balance (
   $bind_addresses,
   $backends,

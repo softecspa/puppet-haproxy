@@ -5,10 +5,13 @@
 # == Params
 #
 # [*fe_name*]
-#  use name if this isn't defined
+#   frontend name. <name> will be used if it's not defined
 #
 # [*bind*]
-#  Array of ip:port
+#   Array of ip on which frontend must bind.
+#
+# [*port*]
+#   Port on which bind
 #
 # [*file_template*]
 #   if customized template should be used. Otherwise check backend-hostname-be_name
@@ -21,6 +24,12 @@
 #
 # [*options*]
 #   array of options
+#
+# [*monitor*]
+#   If true, it exports nrpe::check resource. Default: true. If monitor in haproxy class definition if false this parameter will be ignored
+#
+# [*own_logfile*]
+#   If true, requests on this frontend will be logged in a separate file under ${haproxy::log_dir}/frontend_name.log
 #
 define haproxy::frontend (
   $bind,

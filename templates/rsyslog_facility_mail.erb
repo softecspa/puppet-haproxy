@@ -1,0 +1,2 @@
+if $syslogfacility-text == 'mail' and ( <% ipaddresses.split(',').each do |address| %>$msg contains '<%= address -%>' or <% end -%> $msg contains 'Unexpected SSL connection shutdown' ) then <%= logdir -%>/<%= log_file %>
+&~

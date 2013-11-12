@@ -7,6 +7,7 @@ define haproxy::rsyslog_facility (
   $rotate,
   $retention_days,
   $create,
+  $addresses,
 ) {
 
   if !defined(Rsyslog::Facility[$description]) {

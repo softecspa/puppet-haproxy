@@ -25,7 +25,8 @@ define haproxy::smtp_balance (
 
   # faccio generare file di log distinti per gestirli in maniera distinta con la rotazione dei log.
   # Altrimenti avrei più risorse logrotate con lo stesso nome o più rotazioni che insistono sullo stesso file.
-  @@haproxy::rsyslog_facility  {$name:
+  @@haproxy::rsyslog_facility  {"${name}-${hostname}":
+    addresses       => $ipaddresses,
     description     => "postfix_check_${hostname}",
     logdir          => '/var/log/haproxy_checks',
     log_file        => "${hostname}-mail.log",

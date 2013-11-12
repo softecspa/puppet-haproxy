@@ -5,10 +5,13 @@
 # == Params
 #
 # [*listen_name*]
-#  use name if this isn't defined
+#  name of listen. <name> will be used it it's not specified
 #
 # [*bind*]
-#  ip:port or ip:port-range
+#  ip to bind
+#
+# [*port*]
+#  port or port range to bind
 #
 # [*file_template*]
 #   if customized template should be used. Otherwise check backend-hostname-be_name
@@ -18,6 +21,9 @@
 #
 # [*options*]
 #   array of options
+#
+# [*monitor*]
+#   If true, it exports nrpe::check resource. Default: true. If monitor in haproxy class definition if false this parameter will be ignored
 #
 define haproxy::listen (
   $bind,

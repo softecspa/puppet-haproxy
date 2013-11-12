@@ -5,16 +5,19 @@
 # == Params
 #
 # [*be_name*]
-#  if name isn't defined
+#  backend's name. <name> will be used if it's not defined
 #
 # [*file_template*]
 #   if customized template should be used. Otherwise check backend-hostname-be_name
 #
+# [*options*]
+#   array of haproxy option to enable on this backend.
+#
 # [*mode*]
 #   haproxy mode directive. Can be http or tcp. Default tcp
 #
-# [*options*]
-#   array of options
+# [*monitor*]
+#   export nagios::check resource. If monitor in haproxy class definition is false, this parameter will be ignored
 #
 define haproxy::backend (
   $be_name        = '',

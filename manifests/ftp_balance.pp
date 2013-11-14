@@ -1,3 +1,41 @@
+# = Define haproxy::ftp_balance
+#
+#   This define specialize generic_tcp_balance for use in ftp balancement
+#
+# == Params
+#
+# [*bind_addresses*]
+#   array of VIPs on which bind
+#
+# [*ftp_port*]
+#   port used for ftp service. Default: 21
+#
+# [*backend_name*]
+#   backend's name. <name> will be used if it's not defined
+#
+# [*backends*]
+#   hash of backends to use. Hash can contain as key all of params presents in haproxy::backend::server define
+#
+# [*passv_ports*]
+#   port used for ftp passive mode
+#
+# == Examples
+# 1 - balance ftp service on 192.168.1.100 192.168.1.200 real server balanced on 192.168.0.1 VIP
+#
+#    haproxy::ftp_balance { 'ftp_foo':
+#      bind_addresses  => '192.168.0.1',
+#      backends        => { 'backend-01' => {bind => '192.168.1.100'},
+#                           'backend-02' => {bind => '192.168.1.200'}, },
+#    }
+#
+# 2 - Same example above, but with backend-02 as backup, and bind on more ip_address
+#
+#    haproxy::ftp_balance { 'pop3_foo':
+#      bind_addresses   => [ '192.168.0.1', '192.168.0.2' ],
+#      backends         => { 'backend-01' => {bind => '192.168.1.100'},
+#                            'backend-02' => {bind => '192.168.1.200', backup => true}, },
+#    }
+#
 define haproxy::ftp_balance (
   $bind_addresses,
   $backends,

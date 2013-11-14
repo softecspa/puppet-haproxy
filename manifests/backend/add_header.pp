@@ -5,16 +5,19 @@
 # == Params
 #
 # [*header_name*]
-#   if blank use <name>
+#   Name of the header to add. <name> will be used if it's not set.
 #
 # [*backend_name*]
-#   name of haproxy::backend to rely
+#   name of haproxy::backend resource to rely
+#
+# [*file_template*]
+#   if customized template should be used to override default template.
 #
 # [*type*]
-#   req|resp
+#   req|resp. Default: req
 #
 # [*value*]
-#   of the cookie
+#   value of the header to add
 #
 define haproxy::backend::add_header (
   $backend_name,

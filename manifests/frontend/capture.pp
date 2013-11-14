@@ -11,10 +11,10 @@
 #   template to override with customized feature
 #
 # [*frontend_name*]
-#   name of haproxy::frontend to rely
+#   name of haproxy::frontend resource to rely
 #
 # [*type*]
-#   cookie|respose header|request header
+#   cookie | respose header | request header
 #
 # [*length*]
 #   integer

@@ -1,3 +1,46 @@
+# = Define haproxy::generic_http_balance
+#
+#   This define uses varius haproxy'2 defines to build a balanced http service.
+#   By default it adds a request header called X-HaProxy-Id with value $hostname
+#
+# == Params
+#
+# [*bind_addresses*]
+#   array of VIPs on which bind
+#
+# [*http_port*]
+#   port on wich VIPs address binds. Default: 80
+#
+# [*backend_name*]
+#   backend's name. <name> will be used if it's not defined
+#
+# [*backends*]
+#   hash of backends to use. Hash can contain as key all of params presents in haproxy::backend::server define
+#
+# [*backend_options*]
+#   array of options to pass to backend definition. Default: ['httpclose' , 'forwardfor' ]
+#
+# [*frontend_option*]
+#   array of options to pass to frontend definition. Default: [ 'httplog' ]
+#
+# [*appsession*]
+#   single value or array. Use this application's cookies to mantain persistent sessions.
+#
+# [*add_request_header*]
+#   request headers to add in form of hash. Hash can contain as key all of params present in haproxy::backend::add_header define.
+#
+# [*cookie_capture*]
+#   array of cookie name to capture. When captured, cookie value will be printed in log
+#
+# [*res_header_capture*]
+#   array of response header to capture. When captured, value value will be printed in log
+#
+# [*req_header_capture*]
+#   array of request header to capture. When captured, value value will be printed in log
+#
+# [*own_logfile*]
+#   If true, requests on relied frontend will be logged in a separate file under ${haproxy::log_dir}/frontend_<name>.log
+#
 define haproxy::http_balance (
   $backends,
   $backend_name       = '',

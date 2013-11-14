@@ -5,7 +5,7 @@
 # == Parameters
 #
 # [*frontend_name*]
-#   name of haproxy::frontend to rely
+#   name of haproxy::frontend resource to rely
 #
 # [*acl_name*]
 #   acl name. If not specified <name> will be used
@@ -15,6 +15,9 @@
 #
 # [*use_backend*]
 #   backend to use if acl if matched
+#
+# [*file_template*]
+#   if customized template should be used to override default template.
 #
 define haproxy::frontend::acl (
   $frontend_name,

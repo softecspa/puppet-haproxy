@@ -5,16 +5,22 @@
 # == Params
 #
 # [*cookie_name*]
-#   if blank use <name>
+#   Name of app cookie used to manage sticky session. <name> will be used if it's not set.
 #
 # [*backend_name*]
 #   name of haproxy::backend to rely
 #
-# [*length*]
+# [*file_template*]
+#   if customized template should be used to override default template.
 #
-# [*timeout*]
+# [*length*]
+#   Maximum number of character. Default: 52
+#
+# [*session_timeout*]
+#   Time after which session will be considered timeout. Default: 30m
 #
 # [*options*]
+#   Array of options used for this directive. Please refeer to official HaProxy documentation to see which options tou can use.
 #
 define haproxy::backend::appsession (
   $backend_name,

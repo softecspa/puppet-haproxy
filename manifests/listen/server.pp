@@ -4,33 +4,48 @@
 #
 # == Params
 #
-# [*check*]
-#   true|false
-#
 # [*listen_name*]
-#   name of haproxy::liste to rely
+#   name of haproxy::listen resource to rely
+#
+# [*server_name*]
+#   Server name to use
+#
+# [*server_check*]
+#   Boolen. If true HaProxy will performs healt checks on the server. Default: true
+#
+# [*file_template*]
+#   if customized template should be used to override default template.
 #
 # [*bind*]
-#   ip:port of the server
+#   ip of the server
+#
+# [*port*]
+#   port used to contact the server
 #
 # [*inter*]
+#   Interval between two checks. Format: integer followed by a time suffix. Default: 5s
 #
 # [*downinter*]
+#   interval between two checks on a down hosts. Format: same of inter. Default: 1s
 #
 # [*fastinter*]
+#   interval between two checks when a host is coming back up. Format: same of inter. Default: 1s
 #
 # [*rise*]
+#   Number of positive healt checks needed to consider a server up. Default: 2
 #
 # [*fall*]
+#   Number of negative healt checks needed to consider a server down. Default: 3
 #
 # [*backup*]
 #   true is the server have to work as backup. Default: false
 #
 # [*send_proxy*]
-#   True if the send_proxy directive must be added. Default: false
+#   True if the send_proxy directive must be added. Default: false.
 #
 # [*check_port*]
 #   Port used to check backend
+#
 define haproxy::listen::server (
   $listen_name,
   $bind,

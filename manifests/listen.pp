@@ -14,21 +14,21 @@
 #  port or port range to bind
 #
 # [*file_template*]
-#   if customized template should be used. Otherwise check backend-hostname-be_name
+#   if customized template should be used to override default template.
 #
 # [*mode*]
 #   haproxy mode directive. Can be http or tcp. Default tcp
 #
 # [*options*]
-#   array of options
+#   array of options to use on this listen block
 #
 # [*monitor*]
-#   If true, it exports nrpe::check resource. Default: true. If monitor in haproxy class definition if false this parameter will be ignored
+#   If true, it exports nrpe::check resource. Default: true. If monitor parame in haproxy class definition is false this parameter will be ignored
 #
 define haproxy::listen (
   $bind,
   $port,
-  $listen_name          = '',
+  $listen_name      = '',
   $file_template    = 'haproxy/haproxy_listen_header.erb',
   $mode             = 'tcp',
   $options          = '',

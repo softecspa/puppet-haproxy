@@ -33,6 +33,7 @@ define haproxy::ssh_balance (
     backends        => $backends,
     backend_name    => $backend_name,
     port            => $ssh_port,
+    backend_options => [ 'ssl-hello-chk' ],
   }
 
   if !defined(Augeas['ssh_local_bind']) {

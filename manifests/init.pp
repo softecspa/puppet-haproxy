@@ -59,7 +59,7 @@
 #   enable monitor of process haproxy and hastats
 #
 # [*nagios_hostname*]
-#   hostname of nagios server used for monitoring
+#   hostname of nagios server used for monitoring. Default: global variable $nagios_hostname
 #
 class haproxy (
   $service_ensure   = running,
@@ -81,7 +81,7 @@ class haproxy (
   $stats_user       = 'haproxystats',
   $stats_pass       = '',
   $monitor          = true,
-  $nagios_hostname  = '',
+  $nagios_hostname  = $nagios_hostname,
 ) {
 
   include haproxy::params

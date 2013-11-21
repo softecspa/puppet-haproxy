@@ -19,12 +19,16 @@
 # [*value*]
 #   value of the header to add
 #
+# [*acl*]
+#   add "if <acl>" to the endof line. Only if specified acl is matched, header will be added
+#
 define haproxy::backend::add_header (
   $backend_name,
   $header_name    = '',
   $file_template  = 'haproxy/backend/add_header.erb',
   $type           = 'req',
   $value          = '',
+  $acl            = '',
 ) {
 
   if !defined(Haproxy::Backend[$backend_name]) {
@@ -50,7 +54,7 @@ define haproxy::backend::add_header (
     default => ":\\ $value",
   }
 
-  concat_fragment {"haproxy+002-${backend_name}-003-${name}.tmp":
+  concat_fragment {"haproxy+002-${backend_name}-004-${name}.tmp":
     content => template($file_template),
   }
 

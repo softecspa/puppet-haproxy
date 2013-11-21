@@ -10,7 +10,7 @@ class haproxy::service {
   exec {"${haproxy::params::service_name} reload":
     command     => "/etc/init.d/${haproxy::params::service_name} reload",
     refreshonly => true,
-    subscribe   => Concat_build['haproxy']
+    subscribe   => [ Concat_build['haproxy'], File["${haproxy::params::config_dir}subnet_softec.lst"] ]
   }
 
 }

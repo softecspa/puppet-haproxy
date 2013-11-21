@@ -1,5 +1,5 @@
 
-listen <%= ls_name %> <%= bind %><% if port != '' -%>:<%= port -%><% end -%>
+listen <%= ls_name %> <%= bind %><% if port != '' -%>:<%= port -%><% end %>
     mode <%= mode -%>
 <% scope.lookupvar('array_options').each do |option| -%>
 <% if option != '' -%>

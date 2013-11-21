@@ -1,7 +1,2 @@
-$ModLoad imudp
-$UDPServerAddress 127.0.0.1
-$UDPServerRun 514
-
-
 if $programname == 'haproxy' and $msg contains '<%= rsyslog_tag -%>' then <%= logdir -%>/<%= log_file %>
 & ~

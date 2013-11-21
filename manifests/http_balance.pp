@@ -1,6 +1,6 @@
 # = Define haproxy::generic_http_balance
 #
-#   This define uses varius haproxy'2 defines to build a balanced http service.
+#   This define uses varius haproxy defines to build a balanced http service.
 #   By default it adds a request header called X-HaProxy-Id with value $hostname
 #
 # == Params
@@ -128,10 +128,24 @@ define haproxy::http_balance (
     own_logfile     => $own_logfile,
   }
 
+  haproxy::backend::acl {'from_softec':
+    backend_name  => $be_name,
+    condition     => "src -f ${haproxy::params::config_dir}subnet_softec.lst"
+  }
+
+  file {"${haproxy::params::config_dir}subnet_softec.lst":
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '440',
+    content => template('haproxy/subnet_softec.lst.erb')
+  }
+
   haproxy::backend::add_header { 'X-HaProxy-Id':
     backend_name  => $be_name,
     type          => 'req',
     value         => $hostname,
+    acl           => 'from_softec',
   }
 
   if $appsession != '' {

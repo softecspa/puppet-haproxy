@@ -153,6 +153,12 @@ define haproxy::http_balance (
       backend_name  => $be_name,
       options       => ['request-learn' , 'prefix'],
     }
+
+    haproxy::frontend::capture {$array_appsession :
+      frontend_name => "frontend_${be_name}",
+      capture_type  => 'cookie',
+      length        => 52,
+    }
   }
 
   if $cookie_capture != '' {

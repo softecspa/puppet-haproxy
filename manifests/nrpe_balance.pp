@@ -23,7 +23,7 @@
 define haproxy::nrpe_balance (
   $local_ip,
   $bind_addresses,
-  $backends,
+  $backends       = '',
   $backend_name   = '',
   $nrpe_port      = '5666',
 ) {

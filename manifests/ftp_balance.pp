@@ -38,7 +38,7 @@
 #
 define haproxy::ftp_balance (
   $bind_addresses,
-  $backends,
+  $backends       = '',
   $backend_name   = '',
   $ftp_port       = '21',
   $passv_ports    = '49100-50000',
@@ -49,7 +49,7 @@ define haproxy::ftp_balance (
     false => [ $bind_addresses ],
   }
 
-  if !is_hash($backends) {
+  if (!is_hash($backends)) and ($backends!=''){
     fail('parameter backends must be ah hash')
   }
 
@@ -64,7 +64,14 @@ define haproxy::ftp_balance (
   }
 
   haproxy::backend {$be_name :}
-  create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $ftp_port})
+  if is_hash($backends) {
+    create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $ftp_port})
+  }
+  Haproxy::Backend::Server <<| tag == "${name}_${cluster}" |>> {
+    backend_name  => $be_name,
+    port          => $ftp_port,
+  }
+
   haproxy::frontend {"frontend_${be_name}" :
     bind            => $bind_addresses,
     default_backend => $be_name,
@@ -76,5 +83,12 @@ define haproxy::ftp_balance (
     monitor => false,
     port    => $passv_ports
   }
-  create_resources(haproxy::listen::server,$backends, {'listen_name' => "${be_name}_passv", 'check_port' => $ftp_port})
+
+  if is_hash($backends) {
+    create_resources(haproxy::listen::server,$backends, {'listen_name' => "${be_name}_passv", 'check_port' => $ftp_port})
+  }
+  Haproxy::Listen::Server <<| tag == "${name}_${cluster}" |>> {
+    listen_name  => "${be_name}_passv",
+    check_port   => $ftp_port,
+  }
 }

@@ -23,9 +23,9 @@
 define haproxy::smtp_balance (
   $local_ip,
   $bind_addresses,
-  $backends,
+  $backends       = '',
   $backend_name   = '',
-  $smtp_port       = '25',
+  $smtp_port      = '25',
 ) {
 
   haproxy::generic_tcp_balance { $name :

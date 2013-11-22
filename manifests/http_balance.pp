@@ -42,7 +42,7 @@
 #   If true, requests on relied frontend will be logged in a separate file under ${haproxy::log_dir}/frontend_<name>.log
 #
 define haproxy::http_balance (
-  $backends,
+  $backends           = '',
   $backend_name       = '',
   $bind_addresses,
   $appsession         = '',
@@ -56,7 +56,7 @@ define haproxy::http_balance (
   $own_logfile        = false,
 ) {
 
-  if !is_hash($backends) {
+  if (!is_hash($backends)) and ($backends != '') {
     fail('backends parameter must be hash')
   }
 
@@ -114,7 +114,13 @@ define haproxy::http_balance (
     mode    => 'http'
   }
 
-  create_resources(haproxy::backend::server, $backends, {'backend_name' => $be_name, 'port' => $http_port})
+  if is_hash($backends) {
+    create_resources(haproxy::backend::server, $backends, {'backend_name' => $be_name, 'port' => $http_port})
+  }
+  Haproxy::Backend::Server <<| tag == "${name}_${cluster}" |>> {
+    backend_name  => $be_name,
+    port          => $http_port,
+  }
   if $add_request_header != '' {
     create_resources(haproxy::backend::add_header, $add_request_header, {'backend_name' => $be_name, 'type' => 'req'})
   }

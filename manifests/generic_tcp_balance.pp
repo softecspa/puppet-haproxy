@@ -44,7 +44,7 @@
 #
 define haproxy::generic_tcp_balance (
   $bind_addresses,
-  $backends,
+  $backends         = '',
   $backend_options  = '',
   $frontend_options = '',
   $backend_name     = '',
@@ -56,7 +56,7 @@ define haproxy::generic_tcp_balance (
     false => [ $bind_addresses ],
   }
 
-  if !is_hash($backends) {
+  if (!is_hash($backends)) and ($backends != '') {
     fail('parameter backends must be ah hash')
   }
 
@@ -73,7 +73,13 @@ define haproxy::generic_tcp_balance (
   haproxy::backend {$be_name :
     options => $backend_options
   }
-  create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $port})
+  if is_hash($backends) {
+    create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $port})
+  }
+  Haproxy::Backend::Server <<| tag == "${name}_${cluster}" |>> {
+    backend_name  => $be_name,
+    port          => $port,
+  }
 
   haproxy::frontend {"frontend_${be_name}" :
     bind            => $bind_addresses,

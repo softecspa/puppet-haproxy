@@ -1,7 +1,7 @@
 define haproxy::balanced (
   $cluster_balancer = '',
   $balanced_interface,
-  $active_node,
+  $active_node      = '',
   $http             = true,
   $ftp              = true,
   $ssh              = true,
@@ -9,6 +9,7 @@ define haproxy::balanced (
   $smtp             = true,
   $pop              = true,
   $imap             = true,
+  $weight           = '100',
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
@@ -21,14 +22,16 @@ define haproxy::balanced (
   }
 
   $backup = $active_node?{
+    ''        => false,
     $hostname => false,
     default   => true,
   }
 
   if $http {
     @@haproxy::backend::server { $hostname :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_http_${balancer_cluster}",
+      bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      tag     => "cluster${cluster}_http_${balancer_cluster}",
+      weight  => $weight,
     }
   }
 

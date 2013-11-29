@@ -9,7 +9,7 @@ define haproxy::balanced (
   $smtp             = true,
   $pop              = true,
   $imap             = true,
-  $weight           = '100',
+  $http_weight      = '100',
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
@@ -31,7 +31,7 @@ define haproxy::balanced (
     @@haproxy::backend::server { $hostname :
       bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
       tag     => "cluster${cluster}_http_${balancer_cluster}",
-      weight  => $weight,
+      weight  => $http_weight,
     }
   }
 

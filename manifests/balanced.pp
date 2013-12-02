@@ -9,6 +9,7 @@ define haproxy::balanced (
   $smtp             = true,
   $pop              = true,
   $imap             = true,
+  $ispconfig        = true,
   $http_weight      = '100',
 ) {
 
@@ -85,6 +86,14 @@ define haproxy::balanced (
     @@haproxy::backend::server { "${hostname}-imap" :
       bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
       tag   => "cluster${cluster}_imap_${balancer_cluster}",
+      backup  => $backup,
+    }
+  }
+
+  if $ispconfig and ($active_node == $hostname) {
+    @@haproxy::backend::server { "${hostname}-ispconfig" :
+      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      tag   => "cluster${cluster}_ispconfig_${balancer_cluster}",
       backup  => $backup,
     }
   }

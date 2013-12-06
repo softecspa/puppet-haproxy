@@ -19,3 +19,15 @@ defaults
     contimeout  <%= scope.lookupvar('haproxy::contimeout') %>
     clitimeout  <%= scope.lookupvar('haproxy::clitimeout') %>
     srvtimeout  <%= scope.lookupvar('haproxy::srvtimeout') %>
+
+<% if scope.lookupvar('haproxy::enable_stats') == true -%>
+listen stats :<%= scope.lookupvar('haproxy::stats_port') %>
+    mode http
+    stats enable
+<% if scope.lookupvar('haproxy::stats_hide') == true -%>
+    stats hide-version
+<% end -%>
+    stats realm <%= scope.lookupvar('haproxy::stats_realm') %>
+    stats uri <%= scope.lookupvar('haproxy::stats_uri') %>
+    stats auth <%= scope.lookupvar('haproxy::stats_user') -%>:<%= scope.lookupvar('haproxy::stats_pass') %>
+<% end -%>

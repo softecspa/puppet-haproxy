@@ -170,4 +170,8 @@ class haproxy (
     Class['haproxy::service']
   }
 
+  if defined(Class['datadog']) {
+    include haproxy::datadog
+  }
+
 }

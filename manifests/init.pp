@@ -170,11 +170,11 @@ class haproxy (
     Class['haproxy::service']
   }
 
-  if defined(Class['datadog']) {
-    include haproxy::datadog
-    notify {'test':}
-  } else {
-    notify {'test2':}
-  }
+  #if defined(Class['datadog']) {
+  #  include haproxy::datadog
+  #  notify {'test':}
+  #} else {
+  #  notify {'test2':}
+  #}
 
 }

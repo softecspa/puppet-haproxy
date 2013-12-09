@@ -4,7 +4,7 @@ class haproxy::datadog {
     fail('To enable datadog monitor you must define $public_interface variabile')
   }
 
-  $ip_datadog=inline_template("<%= ipaddress_${public_interface} %>"),
+  $ip_datadog=inline_template("<%= ipaddress_${public_interface} %>")
 
   file {'/etc/dd-agent/conf.d/haproxy.yaml':
     ensure  => present,

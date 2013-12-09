@@ -172,6 +172,9 @@ class haproxy (
 
   if defined(Class['datadog']) {
     include haproxy::datadog
+    notify {'test':}
+  } else {
+    notify {'test2':}
   }
 
 }

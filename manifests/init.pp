@@ -86,6 +86,8 @@ class haproxy (
   $stats_realm      = 'Haproxy\ Statistics',
   $monitor          = true,
   $nagios_hostname  = $nagios_hostname,
+  $user             = 'haproxy',
+  $group            = 'haproxy',
 ) {
 
   include haproxy::params
@@ -138,11 +140,6 @@ class haproxy (
   $array_options = is_array($options)? {
     true  => $options,
     false => [ $options ]
-  }
-
-  $haproxy_user_group = $enable_hatop ? {
-    true  => 'root',
-    false => 'haproxy'
   }
 
   if $log_dir != '' {

@@ -42,8 +42,8 @@ class haproxy::config {
   file { '/var/run/haproxy':
     ensure  => directory,
     mode    => '0755',
-    owner   => $haproxy::haproxy_user_group,
-    group   => $haproxy::haproxy_user_group
+    owner   => $haproxy::user,
+    group   => $haproxy::group
   }
 
 }

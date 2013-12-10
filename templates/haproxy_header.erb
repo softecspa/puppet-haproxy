@@ -1,9 +1,9 @@
 global
     log <%= scope.lookupvar('haproxy::logserver') -%> <%= scope.lookupvar('haproxy::syslog_facility') %>
-    stats socket <%= scope.lookupvar('haproxy::params::sock') %> mode 0600 level admin
+    stats socket <%= scope.lookupvar('haproxy::params::sock') %> mode 0644 level admin
     maxconn 4096
-    user <%= scope.lookupvar('haproxy::haproxy_user_group') %>
-    group <%= scope.lookupvar('haproxy::haproxy_user_group') %>
+    user <%= scope.lookupvar('haproxy::user') %>
+    group <%= scope.lookupvar('haproxy::group') %>
     daemon
 
 defaults

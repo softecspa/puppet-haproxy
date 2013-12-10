@@ -65,5 +65,6 @@ define haproxy::balanced_http (
     bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
     tag     => "cluster${cluster}_http_${balancer_cluster}",
     weight  => $weight,
+    inter   => $inter,
   }
 }

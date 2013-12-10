@@ -51,6 +51,13 @@ define haproxy::balanced_ftp (
   $cluster_balancer = '',
   $balanced_interface,
   $active_node      = '',
+  $server_check     = true,
+  $inter            = '10s',
+  $downinter        = '1s',
+  $fastinter        = '1s',
+  $rise             = 2,
+  $fall             = 3,
+  $weight           = 100,
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
@@ -69,15 +76,29 @@ define haproxy::balanced_ftp (
   }
 
   @@haproxy::backend::server { "${hostname}-ftp" :
-    bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
-    tag     => "cluster${cluster}_ftp_${balancer_cluster}",
-    backup  => $backup,
+    bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    tag           => "cluster${cluster}_ftp_${balancer_cluster}",
+    backup        => $backup,
+    weight        => $weight,
+    inter         => $inter,
+    server_check  => $server_check,
+    downinter     => $downinter,
+    fastinter     => $fastinter,
+    rise          => $rise,
+    fall          => $fall,
   }
 
   @@haproxy::listen::server { "${hostname}-ftp" :
-    bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-    tag   => "cluster${cluster}_ftp_${balancer_cluster}",
-    backup  => $backup,
+    bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    tag           => "cluster${cluster}_ftp_${balancer_cluster}",
+    backup        => $backup,
+    weight        => $weight,
+    inter         => $inter,
+    server_check  => $server_check,
+    downinter     => $downinter,
+    fastinter     => $fastinter,
+    rise          => $rise,
+    fall          => $fall,
   }
 
 }

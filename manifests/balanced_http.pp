@@ -49,7 +49,12 @@ define haproxy::balanced_http (
   $balanced_interface,
   $weight             = '100',
   $inter              = '3s',
-
+  $server_check       = true,
+  $downinter          = '1s',
+  $fastinter          = '1s',
+  $rise               = 2,
+  $fall               = 3,
+  $backup             = false
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
@@ -62,9 +67,15 @@ define haproxy::balanced_http (
   }
 
   @@haproxy::backend::server { $hostname :
-    bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
-    tag     => "cluster${cluster}_http_${balancer_cluster}",
-    weight  => $weight,
-    inter   => $inter,
+    bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    tag           => "cluster${cluster}_http_${balancer_cluster}",
+    weight        => $weight,
+    inter         => $inter,
+    server_check  => $server_check,
+    downinter     => $downinter,
+    fastinter     => $fastinter,
+    rise          => $rise,
+    fall          => $fall,
+    backup        => $backup,
   }
 }

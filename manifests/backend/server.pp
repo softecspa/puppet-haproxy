@@ -53,7 +53,7 @@ define haproxy::backend::server (
   $file_template= 'haproxy/backend/server.erb',
   $server_name  = '',
   $server_check = true,
-  $inter        = '5s',
+  $inter        = '10s',
   $downinter    = '1s',
   $fastinter    = '1s',
   $rise         = 2,

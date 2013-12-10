@@ -48,6 +48,8 @@ define haproxy::balanced_http (
   $cluster_balancer   = '',
   $balanced_interface,
   $weight             = '100',
+  $inter              = '3s',
+
 ) {
 
   if ($cluster == '') or ($cluster == undef) {

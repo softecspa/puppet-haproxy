@@ -1,7 +1,7 @@
 global
     log <%= scope.lookupvar('haproxy::logserver') -%> <%= scope.lookupvar('haproxy::syslog_facility') %>
-    stats socket <%= scope.lookupvar('haproxy::params::sock') %> mode 0644 level admin
-    maxconn 4096
+    stats socket <%= scope.lookupvar('haproxy::params::sock') %> user <%= scope.lookupvar('haproxy::user') -%> group <%= scope.lookupvar('haproxy::group') -%> mode 0644 level admin
+    maxconn <%= scope.lookupvar('haproxy::global_maxconn') %>
     user <%= scope.lookupvar('haproxy::user') %>
     group <%= scope.lookupvar('haproxy::group') %>
     daemon
@@ -15,10 +15,10 @@ defaults
 <% end -%>
 <% end -%>
     retries <%= scope.lookupvar('haproxy::retries') %>
-    maxconn <%= scope.lookupvar('haproxy::maxconn') %>
-    contimeout  <%= scope.lookupvar('haproxy::contimeout') %>
-    clitimeout  <%= scope.lookupvar('haproxy::clitimeout') %>
-    srvtimeout  <%= scope.lookupvar('haproxy::srvtimeout') %>
+    maxconn <%= scope.lookupvar('haproxy::frontend_maxconn') %>
+    timeout connect  <%= scope.lookupvar('haproxy::connect_timeout') %>   #Maximum time to wait for a connection attempt to a server to succeed
+    timeout client <%= scope.lookupvar('haproxy::client_timeout') %>    #Maximum inactivity time on the client side
+    timeout server <%= scope.lookupvar('haproxy::server_timeout') %>    #Maximum inactivity time on the server side.
 
 <% if scope.lookupvar('haproxy::enable_stats') == true -%>
 listen stats :<%= scope.lookupvar('haproxy::stats_port') %>

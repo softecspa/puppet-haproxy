@@ -28,17 +28,20 @@
 # [*enable_hatop*]
 #   enable hatop by installing package and setting user/group to root. Default: true
 #
-# [*maxconn*]
-#   global maxconn
+# [*global_maxconn*]
+#   Sets the maximum number of concurrent connections.
 #
-# [*contimeout*]
-#   haproxy param. Default: 5000
+# [*frontend_maxconn*]
+#   Fix the default maximum number of concurrent connections on a frontend
 #
-# [*clitimeout*]
-#   haproxy param. Default: 50000
+# [*connect_timeout*]
+#   haproxy param. The maximum time in milliseconds to wait for a connection attempt to a server to succeed. Default: 2000
 #
-# [*srvtimeout*]
-#   haproxy param. Default: 50000
+# [*client_timeout*]
+#   haproxy param. The maximum inactivity time in milliseconds on the client side. Default: 20000
+#
+# [*server_timeout*]
+#   haproxy param. The Maximum inactivity time in milliseconds on the server side. Default: 20000
 #
 # [*retries*]
 #   haproxy param. Default: 3
@@ -69,12 +72,12 @@ class haproxy (
   $file_template    = '',
   $syslog_facility  = 'local1',
   $enable_hatop     = true,
-  $maxconn          = 2000,
-  $contimeout       = 5000,
-  $clitimeout       = 50000,
-  $srvtimeout       = 50000,
+  $global_maxconn   = 20000,
+  $frontend_maxconn = 18000,
+  $connect_timeout  = 2000,
+  $client_timeout   = 20000,
+  $server_timeout   = 20000,
   $retries          = 2,
-  $srvtimeout       = 50000,
   $default_mode     = 'tcp',
   $options          = '',
   $enable_stats     = true,
@@ -105,20 +108,24 @@ class haproxy (
     fail ('service_ensure must be boolean or running|stopped')
   }
 
-  if !is_integer($maxconn) {
-    fail ('maxconn should be an integer value')
+  if !is_integer($global_maxconn) {
+    fail ('global_maxconn should be an integer value')
   }
 
-  if !is_integer($contimeout) {
-    fail ('contimeout should be an integer value')
+  if !is_integer($frontend_maxconn) {
+    fail ('frontend_maxconn should be an integer value')
   }
 
-  if !is_integer($clitimeout) {
-    fail ('clitimeout should be an integer value')
+  if !is_integer($connect_timeout) {
+    fail ('connect_timeout should be an integer value')
   }
 
-  if !is_integer($srvtimeout) {
-    fail ('srvtimeout should be an integer value')
+  if !is_integer($client_timeout) {
+    fail ('client_timeout should be an integer value')
+  }
+
+  if !is_integer($server_timeout) {
+    fail ('server_timeout should be an integer value')
   }
 
   if ($default_mode != 'http') and ($default_mode != 'tcp') {

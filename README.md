@@ -20,7 +20,7 @@ When we define haproxy class, we can specify all global options
           enable_stats      => true,
           enable_hatop      => true,
           maxconn           => 2000,
-          contimeout        => 5000,
+          connect_timeout   => 2000,
           clitimeout        => 50000,
           srvtimeout        => 50000,
           mode              => http,

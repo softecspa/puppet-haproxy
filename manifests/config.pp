@@ -46,4 +46,12 @@ class haproxy::config {
     group   => $haproxy::group
   }
 
+  file { $haproxy::params::errorpages_dir :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '644',
+    source  => "puppet:///modules/haproxy/errorpages/${haproxy::custom_errorpages}/",
+    recurse => true,
+  }
 }

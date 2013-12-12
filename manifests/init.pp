@@ -64,6 +64,9 @@
 # [*nagios_hostname*]
 #   hostname of nagios server used for monitoring. Default: global variable $nagios_hostname
 #
+# [*custom_errorpages*]
+#   if defined, errorpages pushed will be searched under files/<code_error>_$custom_errorpages.html. If not define default file will be pushed
+#
 class haproxy (
   $service_ensure   = running,
   $service_enable   = true,
@@ -91,6 +94,7 @@ class haproxy (
   $nagios_hostname  = $nagios_hostname,
   $user             = 'haproxy',
   $group            = 'haproxy',
+  $custom_errorpages= 'default',
 ) {
 
   include haproxy::params

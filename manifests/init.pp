@@ -77,7 +77,7 @@ class haproxy (
   $enable_hatop     = true,
   $global_maxconn   = 20000,
   $frontend_maxconn = 18000,
-  $connect_timeout  = 2000,
+  $connect_timeout  = 10000,
   $client_timeout   = 20000,
   $server_timeout   = 20000,
   $retries          = 2,

@@ -30,8 +30,14 @@
 # [*pop*]
 #   Set to true if pop service on this host have to be balanced by <cluster_balancer>. Default: true
 #
+# [*pops*]
+#   Set to true if pops service on this host have to be balanced by <cluster_balancer>. Default: true
+#
 # [*imap*]
 #   Set to true if imap service on this host have to be balanced by <cluster_balancer>. Default: true
+#
+# [*imaps*]
+#   Set to true if imaps service on this host have to be balanced by <cluster_balancer>. Default: true
 #
 # [*ispconfig*]
 #   Set to true if ispconfig service on this host have to be balanced by <cluster_balancer>. Default: true
@@ -81,7 +87,9 @@ define haproxy::balanced (
   $nrpe             = true,
   $smtp             = true,
   $pop              = true,
+  $pops             = true,
   $imap             = true,
+  $imaps            = true,
   $ispconfig        = true,
   $http_weight      = '100',
 ) {
@@ -155,10 +163,26 @@ define haproxy::balanced (
     }
   }
 
+  if $pops {
+    @@haproxy::backend::server { "${hostname}-pops" :
+      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      tag   => "cluster${cluster}_pops_${balancer_cluster}",
+      backup  => $backup,
+    }
+  }
+
   if $imap {
     @@haproxy::backend::server { "${hostname}-imap" :
       bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
       tag   => "cluster${cluster}_imap_${balancer_cluster}",
+      backup  => $backup,
+    }
+  }
+
+  if $imaps {
+    @@haproxy::backend::server { "${hostname}-imaps" :
+      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      tag   => "cluster${cluster}_imaps_${balancer_cluster}",
       backup  => $backup,
     }
   }

@@ -78,9 +78,21 @@ define haproxy::cluster_balance (
     bind_addresses  => $vip,
   }
 
+  # POPS
+  haproxy::generic_tcp_balance {"cluster${cluster_name}_pops":
+    port            => '995'
+    bind_addresses  => $vip,
+  }
+
   # IMAP
   haproxy::generic_tcp_balance {"cluster${cluster_name}_imap":
     port            => '143',
+    bind_addresses  => $vip,
+  }
+
+  # IMAPS
+  haproxy::generic_tcp_balance {"cluster${cluster_name}_imaps":
+    port            => '993',
     bind_addresses  => $vip,
   }
 

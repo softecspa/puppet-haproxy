@@ -80,7 +80,7 @@ define haproxy::cluster_balance (
 
   # POPS
   haproxy::generic_tcp_balance {"cluster${cluster_name}_pops":
-    port            => '995'
+    port            => '995',
     bind_addresses  => $vip,
   }
 

@@ -134,7 +134,8 @@ define haproxy::http_balance (
     own_logfile     => $own_logfile,
   }
 
-  haproxy::backend::acl {'from_softec':
+  haproxy::backend::acl {"from_softec_${name}":
+    acl_name      => 'from_softec',
     backend_name  => $be_name,
     condition     => "src -f ${haproxy::params::config_dir}subnet_softec.lst"
   }

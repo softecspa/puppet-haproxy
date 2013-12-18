@@ -150,7 +150,8 @@ define haproxy::http_balance (
     }
   }
 
-  haproxy::backend::add_header { 'X-HaProxy-Id':
+  haproxy::backend::add_header { "X-HaProxy-Id_${name}":
+    header_name   => 'X-HaProxy-Id',
     backend_name  => $be_name,
     type          => 'req',
     value         => $hostname,
@@ -158,7 +159,7 @@ define haproxy::http_balance (
   }
 
   if $appsession != '' {
-    haproxy::backend::appsession {$array_appsession :
+    haproxy::backend::appsession {"${array_appsession}" :
       backend_name  => $be_name,
       options       => ['request-learn' , 'prefix'],
     }

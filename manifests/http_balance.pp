@@ -140,12 +140,14 @@ define haproxy::http_balance (
     condition     => "src -f ${haproxy::params::config_dir}subnet_softec.lst"
   }
 
-  file {"${haproxy::params::config_dir}subnet_softec.lst":
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '440',
-    content => template('haproxy/subnet_softec.lst.erb')
+  if !defined(File ["${haproxy::params::config_dir}subnet_softec.lst"]) {
+    file {"${haproxy::params::config_dir}subnet_softec.lst":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '440',
+      content => template('haproxy/subnet_softec.lst.erb')
+    }
   }
 
   haproxy::backend::add_header { 'X-HaProxy-Id':

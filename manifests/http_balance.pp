@@ -159,12 +159,16 @@ define haproxy::http_balance (
   }
 
   if $appsession != '' {
-    haproxy::backend::appsession {"${array_appsession}" :
+    # Fx: uso questa sostituzione per evitare ripetizioni. Lo stesso nome potrebbe essere utilizzato su piu' backend.
+    # All'interno di haproxy::backend::appsession viene eliminata tutto cio' che e' --*--
+    $array_appsession_name = regsubst($array_appsession,'$',"--$name--")
+
+    haproxy::backend::appsession {"${array_appsession_name}" :
       backend_name  => $be_name,
       options       => ['request-learn' , 'prefix'],
     }
 
-    haproxy::frontend::capture {$array_appsession :
+    haproxy::frontend::capture {$array_appsession_name :
       frontend_name => "frontend_${be_name}",
       capture_type  => 'cookie',
       length        => 52,
@@ -172,7 +176,11 @@ define haproxy::http_balance (
   }
 
   if $cookie_capture != '' {
-    haproxy::frontend::capture {$array_cookie_capture :
+    # Fx: uso questa sostituzione per evitare ripetizioni. Lo stesso nome potrebbe essere utilizzato su piu' backend.
+    # All'interno di haproxy::frontend::capture viene eliminata tutto cio' che e' --*--
+    $array_cookie_capture_name = regsubst($array_cookie_capture,'$',"--$name--")
+
+    haproxy::frontend::capture {$array_cookie_capture_name :
       frontend_name => "frontend_${be_name}",
       capture_type  => 'cookie',
       length        => 52,
@@ -180,7 +188,11 @@ define haproxy::http_balance (
   }
 
   if $res_header_capture != '' {
-    haproxy::frontend::capture {$array_res_header_capture :
+    # Fx: uso questa sostituzione per evitare ripetizioni. Lo stesso nome potrebbe essere utilizzato su piu' backend.
+    # All'interno di haproxy::frontend::capture viene eliminata tutto cio' che e' --*--
+    $array_res_header_capture_name = regsubst($array_res_header_capture,'$',"--$name--")
+
+    haproxy::frontend::capture {$array_res_header_capture_name :
       frontend_name => "frontend_${be_name}",
       capture_type  => 'response header',
       length        => 10,
@@ -188,7 +200,11 @@ define haproxy::http_balance (
   }
 
   if $req_header_capture != '' {
-    haproxy::frontend::capture {$array_req_header_capture :
+    # Fx: uso questa sostituzione per evitare ripetizioni. Lo stesso nome potrebbe essere utilizzato su piu' backend.
+    # All'interno di haproxy::frontend::capture viene eliminata tutto cio' che e' --*--
+    $array_req_header_capture_name = regsubst($array_req_header_capture,'$',"--$name--")
+
+    haproxy::frontend::capture {$array_req_header_capture_name :
       frontend_name => "frontend_${be_name}",
       capture_type  => 'request header',
       length        => 10,

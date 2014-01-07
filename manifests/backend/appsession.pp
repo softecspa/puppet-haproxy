@@ -35,10 +35,13 @@ define haproxy::backend::appsession (
     fail ("No Haproxy::Backend[$backend_name] is defined!")
   }
 
-  $appsession_cookie= $cookie_name? {
+  $appsession_cookie_name = $cookie_name? {
     ''      => $name,
     default => $cookie_name,
   }
+
+  # Elimino eventuali suffissi aggiunti da haproxy::http_balance
+  $appsession_cookie=regsubst($appsession_cookie_name,'--.*--$','')
 
   $array_options = is_array($options)? {
     true    => $options,

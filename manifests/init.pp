@@ -72,6 +72,10 @@
 # [*HA*]
 #   if true, installation must support bind on non local ip to work in HA mode
 #
+# == HowTo use
+#
+#   See haproxy::balance and haproxy::balanced defines to see how to balance a cluster.
+#
 class haproxy (
   $service_ensure   = running,
   $service_enable   = true,

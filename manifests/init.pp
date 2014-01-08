@@ -69,7 +69,7 @@
 #
 # == HowTo use
 #
-#   See haproxy::balance and haproxy::balanced defines to see how to balance a cluster.
+#   See haproxy::balance haproxy::balanced haproxy::balanced_http and haproxy::http_balance defines to see how to balance a cluster.
 #
 class haproxy (
   $service_ensure   = running,

@@ -4,25 +4,12 @@ puppet-haproxy
 manage haproxy
 
 This module can be used in two ways:
- - First: you push a static configuration file using static_config. All configuration, frontend, backend etc are specified in this file.
- - Second: you can use params of classes and his defines to construct a conf file with fragments.
+ - First: you can define, step by step, frontends, backends, acl, listen, cookie added or captured etc...
+ - Second: you can use haproxy::generic_tcp:balance define and other more specialized define to balance in a simple mode various services.
  
 # Example 1
 
-In this case, we install haproxy on node botolo01 (that is part of cluster named botolo). We put static configuration file under:
- - puppet:///modules/haproxy/haproxy_botolo01
-
-        class {'haproxy':
-          enabled         => true,
-          running         => true, # (true by default)
-          monitor         => true, # (false by default)
-          static_config   => 'puppet:///modules/haproxy/haproxy_botolo01'  # (true by default)
-        }
-
-# Example 2
-
-In a more structured environment we can use various define to configure haproxy:
-
+We define, step by step, our environment
 
 ## Define haproxy globals
 
@@ -33,7 +20,7 @@ When we define haproxy class, we can specify all global options
           enable_stats      => true,
           enable_hatop      => true,
           maxconn           => 2000,
-          contimeout        => 5000,
+          connect_timeout   => 2000,
           clitimeout        => 50000,
           srvtimeout        => 50000,
           mode              => http,
@@ -161,3 +148,65 @@ add the use_backend directive, eventually with ACL matching
           backend_name  => 'articolo_http',
           if            => 'acl_name'       # resource Haproxy::Acl['acl_name'] must exists.
         }
+
+# Example2
+
+Using more contracted define.
+
+## Balance a generic TCP service on port 8000
+We suppose to balance 8000 port of 192.168.1.1 and 192.168.1.2 servers through 192.168.1.100 VIP address.
+
+haproxy::generic_tcp_balance{'generic_8000':
+  bind_addresses  => '192.168.1.100',
+  backends        => { 'server01' => {bind => '192.168.1.1'},
+                       'server02' => {bind => '192.168.1.2'}, },
+  port             => '8000',
+}
+
+backends parameter accept a hash of servers. For each defined server we can use all parameter presents in haproxy::backend::server define. For example, if we want to realize a balancement active/passive we can set parameter backup to true for each passive servers
+
+haproxy::generic_tcp_balance{'generic_8000':
+  bind_addresses  => '192.168.1.100',
+  backends        => { 'server01' => {bind => '192.168.1.1'},
+                       'server02' => {bind => '192.168.1.2', backup => true}, },
+  port             => '8000',
+}
+
+## Balance http service
+we suppose to balance http service of 192.168.1.1 and 192.168.1.2 servers through 192.168.1.100 and 192.168.1.101 VIP addresses. We want to manage sticky session using JSESSIONID cookie and log JSESSIONID X-HaProxy-Id and X-Backend-Id headers. We also wat a different log file
+haproxy::http_balance {'http':
+  bind_addresses     => [ '192.168.1.100' , '192.168.1.101' ],
+  backends           => { 'server01' => {bind => '192.168.1.1',},
+                          'server02' => {bind => '192.168.1.2',},}
+  appsession         => [ 'JSESSIONID' ],
+  cookie_capture     => [ 'JSESSIONID=' ],
+  res_header_capture => [ 'X-Varnish-Id' , 'X-Backend-Id' ],
+  own_logfile        => true
+}
+
+## Balance nrpe service
+We suppose to balance nrpe service of 192.168.1.1 and 192.168.1.2 servers through 192.168.1.100 VIP address. On the balancer machine nrpe should bind on 172.16.1.1 local address
+haproxy::nrpe_balance {'nrpe':
+  local_ip        => '172.16.1.1',
+  bind_addresses  => '192.168.1.100',
+  backends        => { 'server01' => {bind => '192.168.1.1'},
+                       'server02' => {bind => '192.168.1.2'}, },
+}
+
+## Balance ssh service
+We suppose to balance ssh service of 192.168.1.1 and 192.168.1.2 servers through 192.168.1.100 VIP address. On the balancer machine ssh should bind on 172.16.1.1 local address. We realize a active/passive balancement
+haproxy::ssh_balance {'ssh':
+  local_ip        => '172.16.1.1',
+  bind_addresses  => '192.168.1.100',
+  backends        => { 'server01' => {bind => '192.168.1.1'},
+                       'server02' => {bind => '192.168.1.2', backup => true}, },
+}
+
+## Balance ftp service
+We suppose to balance ftp service of 192.168.1.1 and 192.168.1.2 servers through 192.168.1.100 VIP address. We realize a active/passive balancement
+haproxy::ftp_balance {'ftp':
+  bind_addresses  => '192.168.1.100',
+  backends        => { 'server01' => {bind => '192.168.1.1'},
+                       'server02' => {bind => '192.168.1.2', backup => true}, },
+}
+

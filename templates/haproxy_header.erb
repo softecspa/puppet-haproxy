@@ -1,9 +1,9 @@
 global
     log <%= scope.lookupvar('haproxy::logserver') -%> <%= scope.lookupvar('haproxy::syslog_facility') %>
-    stats socket <%= scope.lookupvar('haproxy::params::sock') %> mode 0600 level admin
-    maxconn 4096
-    user <%= scope.lookupvar('haproxy::haproxy_user_group') %>
-    group <%= scope.lookupvar('haproxy::haproxy_user_group') %>
+    stats socket <%= scope.lookupvar('haproxy::params::sock') %> user <%= scope.lookupvar('haproxy::user') -%> group <%= scope.lookupvar('haproxy::group') -%> mode 0644 level admin
+    maxconn <%= scope.lookupvar('haproxy::global_maxconn') %>
+    user <%= scope.lookupvar('haproxy::user') %>
+    group <%= scope.lookupvar('haproxy::group') %>
     daemon
 
 defaults
@@ -15,7 +15,26 @@ defaults
 <% end -%>
 <% end -%>
     retries <%= scope.lookupvar('haproxy::retries') %>
-    maxconn <%= scope.lookupvar('haproxy::maxconn') %>
-    contimeout  <%= scope.lookupvar('haproxy::contimeout') %>
-    clitimeout  <%= scope.lookupvar('haproxy::clitimeout') %>
-    srvtimeout  <%= scope.lookupvar('haproxy::srvtimeout') %>
+    maxconn <%= scope.lookupvar('haproxy::frontend_maxconn') %>
+    timeout connect  <%= scope.lookupvar('haproxy::connect_timeout') %>   #Maximum time to wait for a connection attempt to a server to succeed
+    timeout client <%= scope.lookupvar('haproxy::client_timeout') %>    #Maximum inactivity time on the client side
+    timeout server <%= scope.lookupvar('haproxy::server_timeout') %>    #Maximum inactivity time on the server side.
+    errorfile 400 /etc/haproxy/errors/400.http
+    errorfile 403 /etc/haproxy/errors/403.http
+    errorfile 408 /etc/haproxy/errors/408.http
+    errorfile 500 /etc/haproxy/errors/500.http
+    errorfile 502 /etc/haproxy/errors/502.http
+    errorfile 503 /etc/haproxy/errors/503.http
+    errorfile 504 /etc/haproxy/errors/504.http
+
+<% if scope.lookupvar('haproxy::enable_stats') == true -%>
+listen stats :<%= scope.lookupvar('haproxy::stats_port') %>
+    mode http
+    stats enable
+<% if scope.lookupvar('haproxy::stats_hide') == true -%>
+    stats hide-version
+<% end -%>
+    stats realm <%= scope.lookupvar('haproxy::stats_realm') %>
+    stats uri <%= scope.lookupvar('haproxy::stats_uri') %>
+    stats auth <%= scope.lookupvar('haproxy::stats_user') -%>:<%= scope.lookupvar('haproxy::stats_pass') %>
+<% end -%>

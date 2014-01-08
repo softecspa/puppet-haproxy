@@ -1,0 +1,7 @@
+init_config:
+
+instances:
+    -   username: <%= scope.lookupvar('haproxy::stats_user') %>
+        password: <%= scope.lookupvar('haproxy::stats_pass') %>
+        url: http://<%= scope.lookupvar('haproxy::datadog::ip_datadog') -%>:<%= scope.lookupvar('haproxy::stats_port') -%><%= scope.lookupvar('haproxy::stats_uri') %>
+

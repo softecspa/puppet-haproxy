@@ -1,0 +1,1 @@
+    server <%= servername -%>    <%= bind -%><% if port != '' -%>:<%= port -%><% end -%> <% if backup -%> backup<% end -%><% if server_check -%> check <% if check_port !='' -%> port <%= check_port -%><% end -%> inter <%= inter -%> downinter <%= downinter -%> fastinter <%= fastinter -%> rise <%= rise -%> fall <%= fall -%><% end -%><% if send_proxy -%> send_proxy <% end %>

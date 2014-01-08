@@ -5,16 +5,22 @@
 # == Params
 #
 # [*header_name*]
-#   if blank use <name>
+#   Name of the header to add. <name> will be used if it's not set.
 #
 # [*backend_name*]
-#   name of haproxy::backend to rely
+#   name of haproxy::backend resource to rely
+#
+# [*file_template*]
+#   if customized template should be used to override default template.
 #
 # [*type*]
-#   req|resp
+#   req|resp. Default: req
 #
 # [*value*]
-#   of the cookie
+#   value of the header to add
+#
+# [*acl*]
+#   add "if <acl>" to the endof line. Only if specified acl is matched, header will be added
 #
 define haproxy::backend::add_header (
   $backend_name,
@@ -22,6 +28,7 @@ define haproxy::backend::add_header (
   $file_template  = 'haproxy/backend/add_header.erb',
   $type           = 'req',
   $value          = '',
+  $acl            = '',
 ) {
 
   if !defined(Haproxy::Backend[$backend_name]) {
@@ -47,8 +54,8 @@ define haproxy::backend::add_header (
     default => ":\\ $value",
   }
 
-  concat_fragment {"haproxy+002-${backend_name}-003-${name}.tmp":
-    content => template($file_template)
+  concat_fragment {"haproxy+002-${backend_name}-004-${name}.tmp":
+    content => template($file_template),
   }
 
 

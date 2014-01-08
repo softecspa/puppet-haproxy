@@ -11,10 +11,10 @@
 #   template to override with customized feature
 #
 # [*frontend_name*]
-#   name of haproxy::frontend to rely
+#   name of haproxy::frontend resource to rely
 #
 # [*type*]
-#   cookie|respose header|request header
+#   cookie | respose header | request header
 #
 # [*length*]
 #   integer
@@ -39,12 +39,15 @@ define haproxy::frontend::capture (
     fail ('Errore must ba an integer value')
   }
 
-  $capture = $capture_name ? {
+  $capture_w_suffix = $capture_name ? {
     ''      => $name,
     default => $capture_name,
   }
 
+  # Elimino eventuali suffissi aggiunti da haproxy::http_balance
+  $capture=regsubst($capture_w_suffix,'--.*--$','')
+
   concat_fragment {"haproxy+003-${frontend_name}-002-${name}.tmp":
-    content => template($file_template)
+    content => template($file_template),
   }
 }

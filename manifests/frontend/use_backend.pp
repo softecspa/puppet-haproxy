@@ -28,6 +28,6 @@ define haproxy::frontend::use_backend (
   }
 
   concat_fragment { "haproxy+003-${frontend_name}-004-${name}.tmp":
-    content => template($file_template)
+    content => template($file_template),
   }
 }

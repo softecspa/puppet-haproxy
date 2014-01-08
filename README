@@ -1,0 +1,74 @@
+# = Class haproxy
+#
+# This class install HaProxy with some configurable params
+#
+# == Params
+#
+# [*service_ensure*]
+#   status of the service. Boolean or running|stopped. Default: running
+#
+# [*service_enable*]
+#   service enabled by default. Boolean. Default: true
+#
+# [*log_dir*]
+#   false do not log on file. otherwise path of directory where haproxy should log (syslog_facility become mandatory). If not false logrotate will be enabled. Default: /var/log/haproxy
+#
+# [*logserver*]
+#   syslog server address. Default: 127.0.0.1
+#
+# [*file_template*]
+#   template used to override default configuration
+#
+# [*syslog_facility*]
+#   facility used to log on rsyslog. Default: local1
+#
+# [*enable_stats*]
+#   enable stats page. Default: true
+#
+# [*enable_hatop*]
+#   enable hatop by installing package and setting user/group to root. Default: true
+#
+# [*global_maxconn*]
+#   Sets the maximum number of concurrent connections.
+#
+# [*frontend_maxconn*]
+#   Fix the default maximum number of concurrent connections on a frontend
+#
+# [*connect_timeout*]
+#   haproxy param. The maximum time in milliseconds to wait for a connection attempt to a server to succeed. Default: 2000
+#
+# [*client_timeout*]
+#   haproxy param. The maximum inactivity time in milliseconds on the client side. Default: 20000
+#
+# [*server_timeout*]
+#   haproxy param. The Maximum inactivity time in milliseconds on the server side. Default: 20000
+#
+# [*retries*]
+#   haproxy param. Default: 3
+#
+# [*default_mode*]
+#   default mode of use. It can be tcp|http. Default: tcp
+#
+# [*options*]
+#   array of options to enable on global section. Default: ''
+#
+# [*stats_user*]
+#   username to use for access stats. Default: haproxystats
+#
+# [*stats_pass*]
+#  password to user for access stats
+#
+# [*monitor*]
+#   enable monitor of process haproxy and hastats
+#
+# [*nagios_hostname*]
+#   hostname of nagios server used for monitoring. Default: global variable $nagios_hostname
+#
+# [*custom_errorpages*]
+#   if defined, errorpages pushed will be searched under files/<code_error>_$custom_errorpages.html. If not define default file will be pushed
+#
+# == HowTo use
+#
+#   See haproxy::balance haproxy::balanced haproxy::balanced_http and haproxy::http_balance defines to see how to balance a cluster.
+#
+

@@ -7,5 +7,56 @@ The easiest way to use this module is to balance a whole cluster. Balanced clust
 Suppose to have this scenario:
 
  * cluster foo is a cluster composed by foo01 and foo02.
- * cluster bar is a active/passive HA balancer system
+ * cluster bar is a active/passive HA balancer system.
 
+We want to balance every services on foo through bar. Except for http we will use a active/passive balancement method, we suppose that foo01 is the active node, foo02 (and every other machine in cluster), will be the backup.
+Cluster_balance and balanced defines don't manage http balancement, to balance http service we'll use http_balance and http_balanced defines that works in the same way of cluster_balance and balanced defines.
+
+  node clusterfoo {
+
+    haproxy::balanced_http {'bar':
+      balanced_interface  => 'ethX',
+    }
+
+    haproxy::balanced {'bar':
+      balanced_interface  => ethX,
+      active_node         => 'foo01'
+    }
+
+  }
+
+  node foo01 inherits clusterfoo {}
+  node foo02 inherits clusterfoo {}
+
+These resources will export haproxy configuration fragments relative to node foo01 and foo02 for each balanced service. In this example we suppose that foo01 and foo02 have their public address (or private, if you want to balance on backplane addesses) on ethX interface. foo01 is the active node.
+On balancer's side:
+
+  node clusterbar {
+
+    $vip = 'x.x.x.x' #(it can be an array of addresses)
+
+    haproxy::http_balance {'clusterfoo_http':
+      bind_addresses      => $vip,
+    }
+
+    haproxy::cluster_balance {'foo':
+      vip             => $vip,
+      local_interface => 'ethX',
+    }
+
+  }
+
+Note the used resource names. We put balanced cluster name. This is a convention. We specify also a <local_interface> parameter in cluster_balance define. This parameter identify interface used to bind local services on the balancer servers. For example: while bar01 and bar02 balance ssh service, bar01 and bar02 also need to have their ssh service reachable. Address present in ethX interface will be used to bind local ssh service.
+
+== Balance a single service ==
+In the same way of cluster_balance and balanced defines, we can balance a single service. We can use various define on backend's side:
+ * balanced_ftp.pp
+ * balanced_http.pp
+ * balanced_imap.pp
+ * balanced_imaps.pp
+ * balanced_ispconfig.pp
+ * balanced_nrpe.pp
+ * balanced_pop.pp
+ * balanced_pops.pp
+ * balanced_smtp.pp
+ * balanced_ssh.pp

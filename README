@@ -2,5 +2,10 @@
 
 This module manages installation and configuration of HaProxy. You can use the module in various mode.
 
-== Use of defines balance and balanced
+== Use of defines haproxy::cluster_balance and haproxy::balanced
+The easiest way to use this module is to balance a whole cluster. Balanced cluster's machines will export their configuration, balancer will import these resources.
+Suppose to have this scenario:
+
+ * cluster foo is a cluster composed by foo01 and foo02.
+ * cluster bar is a active/passive HA balancer system
 

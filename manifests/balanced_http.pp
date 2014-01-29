@@ -54,11 +54,16 @@ define haproxy::balanced_http (
   $fastinter          = '1s',
   $rise               = 2,
   $fall               = 3,
-  $backup             = false
+  $backup             = false,
+  $balanced_port      = '80',
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
     fail ('variable $cluster must be defined')
+  }
+
+  if ($balanced_port == '') or (!is_integer($balanced_port)) {
+    fail('balanced_port parameter must be a valid integer')
   }
 
   $balancer_cluster = $cluster_balancer? {
@@ -66,9 +71,19 @@ define haproxy::balanced_http (
     default => $cluster_balancer,
   }
 
-  @@haproxy::backend::server { $hostname :
+  $tag= $balanced_port? {
+    '80'    => "cluster${cluster}_http_${balancer_cluster}",
+    default => "cluster${cluster}${balanced_port}_http_${balancer_cluster}"
+  }
+
+  $hostname_suffix = $balanced_port? {
+    '80'    => '',
+    default => "-${balanced_port}",
+  }
+
+  @@haproxy::backend::server { "${hostname}${hostname_suffix}":
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
-    tag           => "cluster${cluster}_http_${balancer_cluster}",
+    tag           => $tag,
     weight        => $weight,
     inter         => $inter,
     server_check  => $server_check,

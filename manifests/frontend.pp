@@ -89,7 +89,7 @@ define haproxy::frontend (
       }
 
       @@nagios::check { "${frontend_name}-${::hostname}":
-        host                  => $hostname,
+        host                  => $monitored_hostname,
         checkname             => 'check_nrpe_1arg',
         service_description   => $service_description,
         notifications_enabled => $notifications_enabled,

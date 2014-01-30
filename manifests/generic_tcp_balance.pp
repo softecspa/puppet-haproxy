@@ -5,25 +5,36 @@
 # == Params
 #
 # [*bind_addresses*]
-#   array of VIPs on which bind
+#   array of VIPs on which bind (mandatory)
 #
 # [*port*]
-#   port on wich VIPs address binds
+#   port on wich VIPs address binds (mandatory)
 #
 # [*backend_name*]
 #   backend's name. <name> will be used if it's not defined
 #
 # [*backends*]
-#   hash of backends to use. Hash can contain as key, all of params presents in haproxy::backend::server define
+#   hash of backends to use. Hash can contain as key, all of params presents 
+#   in haproxy::backend::server define
 #
 # [*backend_options*]
 #   array of options to pass to backend definition
 #
-# [*frontend_option*]
+# [*frontend_options*]
 #   array of options to pass to frontend definition
 #
+# [*monitored_hostname*]
+#   Hostname to monitor (defaults to $::hostname)
+#
+# [*notifications_enabled*]
+#   Enable notifications (default: undef)
+#
+# [*notification_period*]
+#   Notification period (default: undef)
+#
 # == Examples
-# 1 - balance pop3 (port 110) service on 192.168.1.100 192.168.1.200 real server balanced on 192.168.0.1 VIP
+# 1 - balance pop3 (port 110) service on 192.168.1.100 192.168.1.200 real
+#     server balanced on 192.168.0.1 VIP
 #
 #    haproxy::generic_tcp_balance { 'pop3_foo':
 #      bind_addresses  => '192.168.0.1',
@@ -32,26 +43,28 @@
 #                           'backend-02' => {bind => '192.168.1.200'}, },
 #    }
 #
-# 2 - Same example above, but with backend-02 as backup, option smtpchk in backend and bind on more ip_address
+# 2 - Same example above, but with backend-02 as backup, option smtpchk in
+#     backend and bind on more ip_address
 #
 #    haproxy::generic_tcp_balance { 'pop3_foo':
 #      bind_addresses   => [ '192.168.0.1', '192.168.0.2' ],
 #      port             => '110',
 #      backends         => { 'backend-01' => {bind => '192.168.1.100'},
-#                           'backend-02' => {bind => '192.168.1.200', backup => true}, },
-#      backend_oiptions => ['smtpchk']
+#                           'backend-02' => {bind => '192.168.1.200', 
+#                                            backup => true}, },
+#      backend_options => ['smtpchk']
 #    }
 #
 define haproxy::generic_tcp_balance (
   $bind_addresses,
+  $port,
+  $backend_name           = '',
   $backends               = '',
   $backend_options        = '',
   $frontend_options       = '',
-  $backend_name           = '',
-  $port,
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
-  notification_period     = undef,
+  $notification_period    = undef,
 ) {
 
   $array_bind_addresses = is_array($bind_addresses)? {

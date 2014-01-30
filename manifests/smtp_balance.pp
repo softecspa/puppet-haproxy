@@ -23,17 +23,23 @@
 define haproxy::smtp_balance (
   $local_ip,
   $bind_addresses,
-  $backends       = '',
-  $backend_name   = '',
-  $smtp_port      = '25',
+  $backends               = '',
+  $backend_name           = '',
+  $smtp_port              = '25',
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
 ) {
 
   haproxy::generic_tcp_balance { $name :
-    bind_addresses  => $bind_addresses,
-    backends        => $backends,
-    backend_name    => $backend_name,
-    port            => $smtp_port,
-    backend_options => [ 'smtpchk' ],
+    bind_addresses        => $bind_addresses,
+    backends              => $backends,
+    backend_name          => $backend_name,
+    port                  => $smtp_port,
+    backend_options       => [ 'smtpchk' ],
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   if !defined(Augeas['smtp_local_bind']) {

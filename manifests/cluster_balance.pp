@@ -45,9 +45,12 @@
 # }
 #
 define haproxy::cluster_balance (
-  $clustername      = '',
+  $clustername            = '',
   $vip,
   $local_interface,
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
 ) {
 
   $cluster_name = $clustername? {
@@ -57,55 +60,82 @@ define haproxy::cluster_balance (
 
   # SSH
   haproxy::ssh_balance {"cluster${cluster_name}_ssh":
-    local_ip        => inline_template("<%= ipaddress_${local_interface} %>"),
-    bind_addresses  => $vip,
+    local_ip              => inline_template("<%= ipaddress_${local_interface} %>"),
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # FTP
   haproxy::ftp_balance {"cluster${cluster_name}_ftp":
-    bind_addresses  => $vip,
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # SMTP
   haproxy::smtp_balance {"cluster${cluster_name}_smtp":
-    local_ip        => '127.0.0.1',
-    bind_addresses  => $vip,
+    local_ip              => '127.0.0.1',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # POP
   haproxy::generic_tcp_balance {"cluster${cluster_name}_pop":
-    port            => '110',
-    bind_addresses  => $vip,
+    port                  => '110',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # POPS
   haproxy::generic_tcp_balance {"cluster${cluster_name}_pops":
-    port            => '995',
-    bind_addresses  => $vip,
+    port                  => '995',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # IMAP
   haproxy::generic_tcp_balance {"cluster${cluster_name}_imap":
-    port            => '143',
-    bind_addresses  => $vip,
+    port                  => '143',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # IMAPS
   haproxy::generic_tcp_balance {"cluster${cluster_name}_imaps":
-    port            => '993',
-    bind_addresses  => $vip,
+    port                  => '993',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # NRPE
   haproxy::nrpe_balance {"cluster${cluster_name}_nrpe":
-    local_ip        => inline_template("<%= ipaddress_${local_interface} %>"),
-    bind_addresses  => $vip,
+    local_ip              => inline_template("<%= ipaddress_${local_interface} %>"),
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
   # ISPCONFIG PANEL
   haproxy::generic_tcp_balance {"cluster${cluster_name}_ispconfig":
-    port            => '81',
-    bind_addresses  => $vip,
+    port                  => '81',
+    bind_addresses        => $vip,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 
 }

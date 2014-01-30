@@ -38,10 +38,13 @@
 #
 define haproxy::ftp_balance (
   $bind_addresses,
-  $backends       = '',
-  $backend_name   = '',
-  $ftp_port       = '21',
-  $passv_ports    = '49100-50000',
+  $backends               = '',
+  $backend_name           = '',
+  $ftp_port               = '21',
+  $passv_ports            = '49100-50000',
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
 ) {
 
   $array_bind_addresses = is_array($bind_addresses)? {
@@ -63,7 +66,11 @@ define haproxy::ftp_balance (
     default => $backend_name
   }
 
-  haproxy::backend {$be_name :}
+  haproxy::backend {$be_name :
+    monitored_hostname    => $monitored_hostname,
+    notification_period   => $notification_period,
+    notifications_enabled => $notifications_enabled,
+  }
   if is_hash($backends) {
     create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $ftp_port})
   }
@@ -73,15 +80,21 @@ define haproxy::ftp_balance (
   }
 
   haproxy::frontend {"frontend_${be_name}" :
-    bind            => $bind_addresses,
-    default_backend => $be_name,
-    port            => $ftp_port,
+    bind                  => $bind_addresses,
+    default_backend       => $be_name,
+    port                  => $ftp_port,
+    monitored_hostname    => $monitored_hostname,
+    notification_period   => $notification_period,
+    notifications_enabled => $notifications_enabled,
   }
 
   haproxy::listen {"${be_name}_passv":
-    bind    => $bind_addresses,
-    monitor => false,
-    port    => $passv_ports
+    bind                  => $bind_addresses,
+    monitor               => false,
+    port                  => $passv_ports,
+    monitored_hostname    => $monitored_hostname,
+    notification_period   => $notification_period,
+    notifications_enabled => $notifications_enabled,
   }
 
   if is_hash($backends) {

@@ -44,11 +44,14 @@
 #
 define haproxy::generic_tcp_balance (
   $bind_addresses,
-  $backends         = '',
-  $backend_options  = '',
-  $frontend_options = '',
-  $backend_name     = '',
+  $backends               = '',
+  $backend_options        = '',
+  $frontend_options       = '',
+  $backend_name           = '',
   $port,
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  notification_period     = undef,
 ) {
 
   $array_bind_addresses = is_array($bind_addresses)? {
@@ -71,7 +74,10 @@ define haproxy::generic_tcp_balance (
   }
 
   haproxy::backend {$be_name :
-    options => $backend_options
+    options               => $backend_options,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
   if is_hash($backends) {
     create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $port})
@@ -82,9 +88,12 @@ define haproxy::generic_tcp_balance (
   }
 
   haproxy::frontend {"frontend_${be_name}" :
-    bind            => $bind_addresses,
-    default_backend => $be_name,
-    port            => $port,
-    options         => $frontend_options,
+    bind                  => $bind_addresses,
+    default_backend       => $be_name,
+    port                  => $port,
+    options               => $frontend_options,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period,
   }
 }

@@ -28,11 +28,14 @@
 define haproxy::listen (
   $bind,
   $port,
-  $listen_name      = '',
-  $file_template    = 'haproxy/haproxy_listen_header.erb',
-  $mode             = 'tcp',
-  $options          = '',
-  $monitor          = true,
+  $listen_name            = '',
+  $file_template          = 'haproxy/haproxy_listen_header.erb',
+  $mode                   = 'tcp',
+  $options                = '',
+  $monitor                = true,
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -61,11 +64,22 @@ define haproxy::listen (
     if $haproxy::monitor {
       nrpe::check_haproxy {$ls_name :}
 
+      $nrpe_check_name = $monitored_hostname? {
+        $::hostname => "!check_haproxy_${ls_name}",
+        default     => "!check_haproxy_${ls_name}_${::hostname}"
+      }
+
+      $service_description = $monitored_hostname? {
+        $::hostname => "HaProxy listen ${ls_name}",
+        default     => "${::hostname} HaProxy listen ${ls_name}",
+      }
+
       @@nagios::check { "${ls_name}-${::hostname}":
         host                  => $hostname,
         checkname             => 'check_nrpe_1arg',
-        service_description   => "HaProxy listen ${ls_name}",
-        notifications_enabled => 0,
+        service_description   => $service_description,
+        notifications_enabled => $notifications_enabled,
+        notification_period   => $notification_period,
         target                => "haproxy_stats_${::hostname}.cfg",
         params                => "!check_haproxy_${ls_name}",
         tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",

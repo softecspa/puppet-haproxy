@@ -41,19 +41,25 @@
 # [*own_logfile*]
 #   If true, requests on relied frontend will be logged in a separate file under ${haproxy::log_dir}/frontend_<name>.log
 #
+# [*monitored_hostname*]
+#   hostname to use in nagios_check. Default: $hostname
+#
 define haproxy::http_balance (
-  $backends           = '',
-  $backend_name       = '',
+  $backends               = '',
+  $backend_name           = '',
   $bind_addresses,
-  $appsession         = '',
-  $add_request_header = '',
-  $backend_options    = [ 'httpclose' , 'forwardfor' ],
-  $frontend_options   = [ 'httplog' ],
-  $cookie_capture     = '',
-  $res_header_capture = '',
-  $req_header_capture = '',
-  $http_port          = '80',
-  $own_logfile        = false,
+  $appsession             = '',
+  $add_request_header     = '',
+  $backend_options        = [ 'httpclose' , 'forwardfor' ],
+  $frontend_options       = [ 'httplog' ],
+  $cookie_capture         = '',
+  $res_header_capture     = '',
+  $req_header_capture     = '',
+  $http_port              = '80',
+  $own_logfile            = false,
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
 ) {
 
   if (!is_hash($backends)) and ($backends != '') {
@@ -110,28 +116,34 @@ define haproxy::http_balance (
   }
 
   haproxy::backend {$be_name:
-    options => $array_be_options,
-    mode    => 'http'
+    options               => $array_be_options,
+    mode                  => 'http',
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period
   }
 
   if is_hash($backends) {
     create_resources(haproxy::backend::server, $backends, {'backend_name' => $be_name, 'port' => $http_port})
   }
   Haproxy::Backend::Server <<| tag == "${name}_${cluster}" |>> {
-    backend_name  => $be_name,
-    port          => $http_port,
+    backend_name        => $be_name,
+    port                => $http_port,
   }
   if $add_request_header != '' {
     create_resources(haproxy::backend::add_header, $add_request_header, {'backend_name' => $be_name, 'type' => 'req'})
   }
 
   haproxy::frontend {"frontend_${be_name}":
-    bind            => $bind_addresses,
-    port            => $http_port,
-    default_backend => $be_name,
-    options         => $array_fe_options,
-    mode            => 'http',
-    own_logfile     => $own_logfile,
+    bind                  => $bind_addresses,
+    port                  => $http_port,
+    default_backend       => $be_name,
+    options               => $array_fe_options,
+    mode                  => 'http',
+    own_logfile           => $own_logfile,
+    monitored_hostname    => $monitored_hostname,
+    notifications_enabled => $notifications_enabled,
+    notification_period   => $notification_period
   }
 
   haproxy::backend::acl {"from_softec_${name}":

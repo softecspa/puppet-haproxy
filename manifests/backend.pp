@@ -20,11 +20,15 @@
 #   export nagios::check resource. If monitor in haproxy class definition is false, this parameter will be ignored
 #
 define haproxy::backend (
-  $be_name        = '',
-  $file_template  = 'haproxy/haproxy_backend_header.erb',
-  $options        = '',
-  $mode           = 'tcp',
-  $monitor        = true,
+  $be_name                = '',
+  $file_template          = 'haproxy/haproxy_backend_header.erb',
+  $options                = '',
+  $mode                   = 'tcp',
+  $monitor                = true,
+  $monitored_hostname     = $::hostname,
+  $notifications_enabled  = undef,
+  $notification_period    = undef,
+
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -49,13 +53,24 @@ define haproxy::backend (
     if $haproxy::monitor {
       nrpe::check_haproxy {$backend_name :}
 
+      $nrpe_check_name = $monitored_hostname? {
+        $::hostname => "!check_haproxy_${backend_name}",
+        default     => "!check_haproxy_${backend_name}_${::hostname}"
+      }
+
+      $service_description = $monitored_hostname? {
+        $::hostname => "HaProxy backend ${backend_name}",
+        default     => "${::hostname} HaProxy backend ${backend_name}",
+      }
+
       @@nagios::check { "${backend_name}-${::hostname}":
-        host                  => $hostname,
+        host                  => $monitored_hostname,
         checkname             => 'check_nrpe_1arg',
-        service_description   => "HaProxy backend ${backend_name}",
-        notifications_enabled => 0,
+        service_description   => $service_description,
+        notifications_enabled => $notifications_enabled,
+        notification_period   => $notification_period,
         target                => "haproxy_stats_${::hostname}.cfg",
-        params                => "!check_haproxy_${backend_name}",
+        params                => $nrpe_check_name,
         tag                   => "nagios_check_haproxy_${haproxy::nagios_hostname}",
       }
     }

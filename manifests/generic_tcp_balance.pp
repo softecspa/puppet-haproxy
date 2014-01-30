@@ -14,7 +14,7 @@
 #   backend's name. <name> will be used if it's not defined
 #
 # [*backends*]
-#   hash of backends to use. Hash can contain as key, all of params presents 
+#   hash of backends to use. Hash can contain as key, all of params presents
 #   in haproxy::backend::server define
 #
 # [*backend_options*]
@@ -50,7 +50,7 @@
 #      bind_addresses   => [ '192.168.0.1', '192.168.0.2' ],
 #      port             => '110',
 #      backends         => { 'backend-01' => {bind => '192.168.1.100'},
-#                           'backend-02' => {bind => '192.168.1.200', 
+#                           'backend-02' => {bind => '192.168.1.200',
 #                                            backup => true}, },
 #      backend_options => ['smtpchk']
 #    }
@@ -62,6 +62,7 @@ define haproxy::generic_tcp_balance (
   $backends               = '',
   $backend_options        = '',
   $frontend_options       = '',
+  $monitor                = true,
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
@@ -88,6 +89,7 @@ define haproxy::generic_tcp_balance (
 
   haproxy::backend {$be_name :
     options               => $backend_options,
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
@@ -104,6 +106,7 @@ define haproxy::generic_tcp_balance (
     bind                  => $bind_addresses,
     default_backend       => $be_name,
     port                  => $port,
+    monitor               => $monitor,
     options               => $frontend_options,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,

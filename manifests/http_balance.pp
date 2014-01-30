@@ -57,6 +57,7 @@ define haproxy::http_balance (
   $req_header_capture     = '',
   $http_port              = '80',
   $own_logfile            = false,
+  $monitor                = true,
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
@@ -118,6 +119,7 @@ define haproxy::http_balance (
   haproxy::backend {$be_name:
     options               => $array_be_options,
     mode                  => 'http',
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period
@@ -141,6 +143,7 @@ define haproxy::http_balance (
     options               => $array_fe_options,
     mode                  => 'http',
     own_logfile           => $own_logfile,
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period

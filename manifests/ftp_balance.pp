@@ -43,6 +43,7 @@ define haproxy::ftp_balance (
   $ftp_port               = '21',
   $passv_ports            = '49100-50000',
   $monitored_hostname     = $::hostname,
+  $monitor                = true,
   $notifications_enabled  = undef,
   $notification_period    = undef,
 ) {
@@ -67,6 +68,7 @@ define haproxy::ftp_balance (
   }
 
   haproxy::backend {$be_name :
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,
@@ -83,6 +85,7 @@ define haproxy::ftp_balance (
     bind                  => $bind_addresses,
     default_backend       => $be_name,
     port                  => $ftp_port,
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,
@@ -92,6 +95,7 @@ define haproxy::ftp_balance (
     bind                  => $bind_addresses,
     monitor               => false,
     port                  => $passv_ports,
+    monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,

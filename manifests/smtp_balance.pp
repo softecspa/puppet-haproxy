@@ -48,7 +48,11 @@ define haproxy::smtp_balance (
       changes => [
         "set inet_interfaces $local_ip",
       ],
-      notify  => Service['postfix'],
+    }
+
+    nrpe::check{'smtp_local':
+      binaryname  => 'check_smtp',
+      params      => "-H ${local_ip}",
     }
   }
 }

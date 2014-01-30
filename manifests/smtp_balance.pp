@@ -48,6 +48,7 @@ define haproxy::smtp_balance (
       changes => [
         "set inet_interfaces $local_ip",
       ],
+      notify  => Service['postfix'],
     }
   }
 }

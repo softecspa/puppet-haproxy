@@ -93,7 +93,6 @@ define haproxy::ftp_balance (
 
   haproxy::listen {"${be_name}_passv":
     bind                  => $bind_addresses,
-    monitor               => false,
     port                  => $passv_ports,
     monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,

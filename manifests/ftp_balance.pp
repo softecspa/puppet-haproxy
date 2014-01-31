@@ -91,10 +91,11 @@ define haproxy::ftp_balance (
     notifications_enabled => $notifications_enabled,
   }
 
+  # Non va monitorato, darebbe sempre errore
   haproxy::listen {"${be_name}_passv":
     bind                  => $bind_addresses,
     port                  => $passv_ports,
-    monitor               => $monitor,
+    monitor               => false,
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,

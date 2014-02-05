@@ -46,6 +46,9 @@ define haproxy::ftp_balance (
   $monitor                = true,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $timeout_connect        = '',
+  $timeout_client         = '',
+  $timeout_server         = '',
 ) {
 
   $array_bind_addresses = is_array($bind_addresses)? {

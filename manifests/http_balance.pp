@@ -61,6 +61,9 @@ define haproxy::http_balance (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $timeout_connect        = '',
+  $timeout_client         = '',
+  $timeout_server         = '',
 ) {
 
   if (!is_hash($backends)) and ($backends != '') {
@@ -122,7 +125,10 @@ define haproxy::http_balance (
     monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
-    notification_period   => $notification_period
+    notification_period   => $notification_period,
+    timeout_connect       => $timeout_connect,
+    timeout_client        => $timeout_client,
+    timeout_server        => $timeout_server,
   }
 
   if is_hash($backends) {

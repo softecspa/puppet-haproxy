@@ -28,7 +28,9 @@ define haproxy::backend (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
-
+  $timeout_connect        = '',
+  $timeout_client         = '',
+  $timeout_server         = '',
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {

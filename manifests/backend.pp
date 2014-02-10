@@ -47,8 +47,26 @@ define haproxy::backend (
     false => [ $options ]
   }
 
-  concat_fragment {"haproxy+002-${name}-001.tmp":
+  concat_fragment {"haproxy+002-${name}-001-1.tmp":
     content => template($file_template),
+  }
+
+  if $timeout_connect != '' {
+    concat_fragment {"haproxy+002-${name}-001-2.tmp":
+      content => "    timeout connect $timeout_connect"
+    }
+  }
+
+  if $timeout_server != '' {
+    concat_fragment {"haproxy+002-${name}-001-3.tmp":
+      content => "    timeout server $timeout_server"
+    }
+  }
+
+  if $timeout_client != '' {
+    concat_fragment {"haproxy+002-${name}-001-4.tmp":
+      content => "    timeout client $timeout_client"
+    }
   }
 
   if $monitor {

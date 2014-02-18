@@ -8,6 +8,12 @@ class haproxy::install {
     package {$haproxy::params::hatop_package_name :
       ensure  => present,
     }
+
+    if !defined(Package[$haproxy::params::socat_package_name]) {
+      package {$haproxy::params::socat_package_name : 
+        ensure  => present,
+      }
+    }
   }
 
 }

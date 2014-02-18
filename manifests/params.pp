@@ -2,6 +2,7 @@ class haproxy::params {
 
   $package_name       = 'haproxy'
   $hatop_package_name = 'hatop'
+  $socat_package_name = 'socat'
   $sock               = '/var/run/haproxy/haproxy.sock'
   $config_dir         = '/etc/haproxy/'
   $default_config     = '/etc/default/haproxy'

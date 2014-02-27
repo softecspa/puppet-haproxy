@@ -127,7 +127,6 @@ define haproxy::http_balance (
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
     timeout_connect       => $timeout_connect,
-    timeout_client        => $timeout_client,
     timeout_server        => $timeout_server,
   }
 
@@ -152,7 +151,8 @@ define haproxy::http_balance (
     monitor               => $monitor,
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
-    notification_period   => $notification_period
+    notification_period   => $notification_period,
+    timeout_client        => $timeout_client,
   }
 
   haproxy::backend::acl {"from_softec_${name}":

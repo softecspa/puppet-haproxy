@@ -44,6 +44,7 @@ define haproxy::frontend (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $timeout_client         = '',
 ) {
 
   if ($mode != 'http') and ($mode != 'tcp') {
@@ -70,8 +71,14 @@ define haproxy::frontend (
     fail('invalid ip_address value present in bind')
   }
 
-  concat_fragment {"haproxy+003-${name}-001.tmp":
+  concat_fragment {"haproxy+003-${name}-001-1.tmp":
     content => template($file_template),
+  }
+
+  if $timeout_client != '' {
+    concat_fragment {"haproxy+003-${name}-001-2.tmp":
+      content => "    timeout client $timeout_client"
+    }
   }
 
   if $monitor {

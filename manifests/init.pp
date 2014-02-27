@@ -99,6 +99,7 @@ class haproxy (
   $user             = 'haproxy',
   $group            = 'haproxy',
   $custom_errorpages= 'default',
+  $tune_bufsize     = '',
 ) {
 
   include haproxy::params

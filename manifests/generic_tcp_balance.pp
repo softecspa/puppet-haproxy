@@ -66,6 +66,9 @@ define haproxy::generic_tcp_balance (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $timeout_connect        = '',
+  $timeout_client         = '',
+  $timeout_server         = '',
 ) {
 
   $array_bind_addresses = is_array($bind_addresses)? {
@@ -93,6 +96,8 @@ define haproxy::generic_tcp_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_server        => $timeout_server,
+    timeout_connect       => $timeout_connect,
   }
   if is_hash($backends) {
     create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $port})
@@ -111,5 +116,6 @@ define haproxy::generic_tcp_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $timeout_client,
   }
 }

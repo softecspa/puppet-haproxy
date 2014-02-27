@@ -52,6 +52,33 @@ define haproxy::cluster_balance (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $ssh_timeout_client     = '',
+  $ssh_timeout_server     = '',
+  $ssh_timeout_connect    = '',
+  $ftp_timeout_client     = '',
+  $ftp_timeout_server     = '',
+  $ftp_timeout_connect    = '',
+  $smtp_timeout_client    = '',
+  $smtp_timeout_server    = '',
+  $smtp_timeout_connect   = '',
+  $pop_timeout_client     = '',
+  $pop_timeout_server     = '',
+  $pop_timeout_connect    = '',
+  $pops_timeout_client    = '',
+  $pops_timeout_server    = '',
+  $pops_timeout_connect   = '',
+  $imap_timeout_client    = '',
+  $imap_timeout_server    = '',
+  $imap_timeout_connect   = '',
+  $imaps_timeout_client   = '',
+  $imaps_timeout_server   = '',
+  $imaps_timeout_connect  = '',
+  $nrpe_timeout_client    = '',
+  $nrpe_timeout_server    = '',
+  $nrpe_timeout_connect   = '',
+  $isp_timeout_client     = '',
+  $isp_timeout_server     = '',
+  $isp_timeout_connect    = '',
 ) {
 
   $cluster_name = $clustername? {
@@ -67,6 +94,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $ssh_timeout_client,
+    timeout_server        => $ssh_timeout_server,
+    timeout_connect       => $ssh_timeout_connect,
   }
 
   # FTP
@@ -76,6 +106,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $ftp_timeout_client,
+    timeout_server        => $ftp_timeout_server,
+    timeout_connect       => $ftp_timeout_connect,
   }
 
   # SMTP
@@ -86,6 +119,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $smtp_timeout_client,
+    timeout_server        => $smtp_timeout_server,
+    timeout_connect       => $smtp_timeout_connect,
   }
 
   # POP
@@ -96,6 +132,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $pop_timeout_client,
+    timeout_server        => $pop_timeout_server,
+    timeout_connect       => $pop_timeout_connect,
   }
 
   # POPS
@@ -106,6 +145,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $pops_timeout_client,
+    timeout_server        => $pops_timeout_server,
+    timeout_connect       => $pops_timeout_connect,
   }
 
   # IMAP
@@ -116,6 +158,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $imap_timeout_client,
+    timeout_server        => $imap_timeout_server,
+    timeout_connect       => $imap_timeout_connect,
   }
 
   # IMAPS
@@ -126,6 +171,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $imaps_timeout_client,
+    timeout_server        => $imaps_timeout_server,
+    timeout_connect       => $imaps_timeout_connect,
   }
 
   # NRPE
@@ -136,6 +184,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $nrpe_timeout_client,
+    timeout_server        => $nrpe_timeout_server,
+    timeout_connect       => $nrpe_timeout_connect,
   }
 
   # ISPCONFIG PANEL
@@ -146,6 +197,9 @@ define haproxy::cluster_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_client        => $nrpe_timeout_client,
+    timeout_server        => $nrpe_timeout_server,
+    timeout_connect       => $nrpe_timeout_connect,
   }
 
 }

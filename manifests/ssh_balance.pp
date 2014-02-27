@@ -30,6 +30,9 @@ define haproxy::ssh_balance (
   $monitored_hostname     = $::hostname,
   $notifications_enabled  = undef,
   $notification_period    = undef,
+  $timeout_connect        = '',
+  $timeout_client         = '',
+  $timeout_server         = '',
 ) {
 
   haproxy::generic_tcp_balance { $name :
@@ -41,6 +44,9 @@ define haproxy::ssh_balance (
     monitored_hostname    => $monitored_hostname,
     notifications_enabled => $notifications_enabled,
     notification_period   => $notification_period,
+    timeout_connect       => $timeout_connect,
+    timeout_client        => $timeout_client,
+    timeout_server        => $timeout_server,
   }
 
   if !defined(Augeas['ssh_local_bind']) {

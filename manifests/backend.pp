@@ -29,7 +29,6 @@ define haproxy::backend (
   $notifications_enabled  = undef,
   $notification_period    = undef,
   $timeout_connect        = '',
-  $timeout_client         = '',
   $timeout_server         = '',
 ) {
 
@@ -60,12 +59,6 @@ define haproxy::backend (
   if $timeout_server != '' {
     concat_fragment {"haproxy+002-${name}-001-3.tmp":
       content => "    timeout server $timeout_server"
-    }
-  }
-
-  if $timeout_client != '' {
-    concat_fragment {"haproxy+002-${name}-001-4.tmp":
-      content => "    timeout client $timeout_client"
     }
   }
 

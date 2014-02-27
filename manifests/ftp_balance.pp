@@ -75,6 +75,8 @@ define haproxy::ftp_balance (
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,
+    timeout_connect       => $timeout_connect,
+    timeout_server        => $timeout_server,
   }
   if is_hash($backends) {
     create_resources(haproxy::backend::server,$backends, {'backend_name' => $be_name, 'port' => $ftp_port})
@@ -92,6 +94,7 @@ define haproxy::ftp_balance (
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,
+    timeout_client        => $timeout_client,
   }
 
   # Non va monitorato, darebbe sempre errore
@@ -102,6 +105,10 @@ define haproxy::ftp_balance (
     monitored_hostname    => $monitored_hostname,
     notification_period   => $notification_period,
     notifications_enabled => $notifications_enabled,
+    timeout_connect       => $timeout_connect,
+    timeout_server        => $timeout_server,
+    timeout_client        => $timeout_client,
+
   }
 
   if is_hash($backends) {

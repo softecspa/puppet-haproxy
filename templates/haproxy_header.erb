@@ -5,6 +5,7 @@ global
     user <%= scope.lookupvar('haproxy::user') %>
     group <%= scope.lookupvar('haproxy::group') %>
     daemon
+<% if scope.lookupvar('haproxy::tune_bufsize') != '' -%>    tune.bufsize <%= scope.lookupvar('haproxy::tune_bufsize') -%><% end %>
 
 defaults
     log global

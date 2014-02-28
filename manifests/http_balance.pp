@@ -63,7 +63,7 @@ define haproxy::http_balance (
   $notification_period    = undef,
   $timeout_connect        = '',
   $timeout_client         = '',
-  $timeout_server         = '',
+  $timeout_server         = '300000',
 ) {
 
   if (!is_hash($backends)) and ($backends != '') {

@@ -83,7 +83,7 @@ class haproxy (
   $frontend_maxconn = 18000,
   $connect_timeout  = 5000,
   $client_timeout   = 50000,
-  $server_timeout   = 50000,
+  $server_timeout   = 300000,
   $retries          = 2,
   $default_mode     = 'tcp',
   $options          = '',

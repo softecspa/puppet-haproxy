@@ -27,7 +27,7 @@ define haproxy::backend::appsession (
   $cookie_name      = '',
   $file_template    = 'haproxy/backend/appsession.erb',
   $length           = 52,
-  $session_timeout  = '30m',
+  $session_timeout  = '60m',
   $options          = '',
 ) {
 

@@ -1,11 +1,11 @@
-# = Define haproxy::backend::add_header
+# = Define haproxy::backend::del_header
 #
-#   add a header to request or response
+#   delete a header from request or response
 #
 # == Params
 #
 # [*header_name*]
-#   Name of the header to add. <name> will be used if it's not set.
+#   Name of the header to delete. <name> will be used if it's not set.
 #
 # [*backend_name*]
 #   name of haproxy::backend resource to rely
@@ -16,18 +16,14 @@
 # [*type*]
 #   req|resp. Default: req
 #
-# [*value*]
-#   value of the header to add
-#
 # [*acl*]
-#   add "if <acl>" to the endof line. Only if specified acl is matched, header will be added
+#   add "if <acl>" to the endof line. Only if specified acl is matched, header will be deleted
 #
-define haproxy::backend::add_header (
+define haproxy::backend::del_header (
   $backend_name,
   $header_name    = '',
-  $file_template  = 'haproxy/backend/add_header.erb',
+  $file_template  = 'haproxy/backend/del_header.erb',
   $type           = 'req',
-  $value          = '',
   $acl            = '',
 ) {
 
@@ -45,16 +41,11 @@ define haproxy::backend::add_header (
   }
 
   $command = $type? {
-    'req'   => 'reqadd',
-    'resp'  => 'rspadd',
+    'req'   => 'reqdel',
+    'resp'  => 'rspdel',
   }
 
-  $header_value = $value? {
-    ''      => $value,
-    default => ":\\ $value",
-  }
-
-  concat_fragment {"haproxy+002-${backend_name}-005-${name}.tmp":
+  concat_fragment {"haproxy+002-${backend_name}-004-${name}.tmp":
     content => template($file_template),
   }
 

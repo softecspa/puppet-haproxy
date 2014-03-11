@@ -110,7 +110,7 @@ define haproxy::backend::server (
     default => "${bind}:${port}",
   }
 
-  concat_fragment {"haproxy+002-${backend_name}-005-${name}.tmp":
+  concat_fragment {"haproxy+002-${backend_name}-006-${name}.tmp":
     content => template($file_template),
   }
 }

@@ -172,7 +172,7 @@ define haproxy::http_balance (
   }
 
   haproxy::backend::del_header { "X-Varnish-Debug_${name}":
-    header_name   => 'X-Varnish-Debug',
+    header_name   => 'X-Debug',
     backend_name  => $be_name,
     type          => 'req',
     acl           => '!from_softec',

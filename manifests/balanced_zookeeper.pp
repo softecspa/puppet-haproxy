@@ -93,7 +93,7 @@ define haproxy::balanced_zookeeper (
 
   @@haproxy::backend::server { "${hostname}${hostname_suffix}${port_suffix}" :
     server_name => $hostname,
-    bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    bind        => $listen_address,
     tag         => "cluster${cluster}_zookeeper_${balancer_cluster}",
     backup      => $backup,
     real_port   => $port

@@ -70,8 +70,9 @@ define haproxy::balanced_smtp (
   }
 
   @@haproxy::backend::server { "${hostname}-smtp" :
-    bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-    tag   => "cluster${cluster}_smtp_${balancer_cluster}",
-    backup  => $backup,
+    bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name => $hostname,
+    tag         => "cluster${cluster}_smtp_${balancer_cluster}",
+    backup      => $backup,
   }
 }

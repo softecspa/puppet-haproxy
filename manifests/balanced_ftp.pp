@@ -77,6 +77,7 @@ define haproxy::balanced_ftp (
 
   @@haproxy::backend::server { "${hostname}-ftp" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_ftp_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,
@@ -90,6 +91,7 @@ define haproxy::balanced_ftp (
 
   @@haproxy::listen::server { "${hostname}-ftp" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_ftp_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,

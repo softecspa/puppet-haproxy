@@ -72,6 +72,7 @@ define haproxy::balanced_ispconfig (
 
   @@haproxy::backend::server { "${hostname}-ispconfig" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_ispconfig_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,

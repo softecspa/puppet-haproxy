@@ -77,6 +77,7 @@ define haproxy::balanced_imaps (
 
   @@haproxy::backend::server { "${hostname}-imaps" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_imaps_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,

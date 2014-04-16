@@ -77,6 +77,7 @@ define haproxy::balanced_pop (
 
   @@haproxy::backend::server { "${hostname}-pop" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_pop_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,

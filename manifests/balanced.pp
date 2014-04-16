@@ -111,87 +111,98 @@ define haproxy::balanced (
 
   if $http {
     @@haproxy::backend::server { $hostname :
-      bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag     => "cluster${cluster}_http_${balancer_cluster}",
-      weight  => $http_weight,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_http_${balancer_cluster}",
+      weight      => $http_weight,
     }
   }
 
   if $ftp {
     @@haproxy::backend::server { "${hostname}-ftp" :
-      bind    => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag     => "cluster${cluster}_ftp_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_ftp_${balancer_cluster}",
+      backup      => $backup,
     }
 
     @@haproxy::listen::server { "${hostname}-ftp" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_ftp_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_ftp_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $ssh {
     @@haproxy::backend::server { "${hostname}-ssh" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_ssh_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_ssh_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $nrpe {
     @@haproxy::backend::server { "${hostname}-nrpe" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_nrpe_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_nrpe_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $smtp {
     @@haproxy::backend::server { "${hostname}-smtp" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_smtp_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_smtp_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $pop {
     @@haproxy::backend::server { "${hostname}-pop" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_pop_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_pop_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $pops {
     @@haproxy::backend::server { "${hostname}-pops" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_pops_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_pops_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $imap {
     @@haproxy::backend::server { "${hostname}-imap" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_imap_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_imap_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $imaps {
     @@haproxy::backend::server { "${hostname}-imaps" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_imaps_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_imaps_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 
   if $ispconfig and ($active_node == $hostname) {
     @@haproxy::backend::server { "${hostname}-ispconfig" :
-      bind  => inline_template("<%= ipaddress_${balanced_interface} %>"),
-      tag   => "cluster${cluster}_ispconfig_${balancer_cluster}",
-      backup  => $backup,
+      bind        => inline_template("<%= ipaddress_${balanced_interface} %>"),
+      server_name => $hostname,
+      tag         => "cluster${cluster}_ispconfig_${balancer_cluster}",
+      backup      => $backup,
     }
   }
 }

@@ -77,6 +77,7 @@ define haproxy::balanced_nrpe (
 
   @@haproxy::backend::server { "${hostname}-nrpe" :
     bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    server_name   => $hostname,
     tag           => "cluster${cluster}_nrpe_${balancer_cluster}",
     backup        => $backup,
     weight        => $weight,

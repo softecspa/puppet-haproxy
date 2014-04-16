@@ -61,6 +61,7 @@ define haproxy::backend::server (
   $backup       = false,
   $send_proxy   = false,
   $weight       = '100',
+  $real_port    = '',
 ) {
 
   if !defined(Haproxy::Backend[$backend_name]) {
@@ -105,9 +106,14 @@ define haproxy::backend::server (
     default => $server_name,
   }
 
-  $bind_address = $port? {
+  $bind_port = $real_port? {
+    ''      => $port,
+    default => $real_port,
+  }
+
+  $bind_address = $bind_port? {
     ''      => $bind,
-    default => "${bind}:${port}",
+    default => "${bind}:${bind_port}",
   }
 
   concat_fragment {"haproxy+002-${backend_name}-006-${name}.tmp":

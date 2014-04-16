@@ -46,7 +46,8 @@
 #
 define haproxy::balanced_http (
   $cluster_balancer   = '',
-  $balanced_interface,
+  $balanced_interface = '',
+  $balanced_address   = '',
   $weight             = '100',
   $inter              = '3s',
   $server_check       = true,
@@ -55,15 +56,20 @@ define haproxy::balanced_http (
   $rise               = 2,
   $fall               = 3,
   $backup             = false,
-  $balanced_port      = '80',
+  $balancer_port      = '80',
+  $port               = ''
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
     fail ('variable $cluster must be defined')
   }
 
-  if ($balanced_port == '') or (!is_integer($balanced_port)) {
-    fail('balanced_port parameter must be a valid integer')
+  if ($balancer_port == '') or (!is_integer($balancer_port)) {
+    fail('balancer_port parameter must be a valid integer')
+  }
+
+  if ($balanced_interface == '') and ($balanced_address == '') {
+    fail('please sperify balanced_address or balanced_interface')
   }
 
   $balancer_cluster = $cluster_balancer? {
@@ -71,18 +77,29 @@ define haproxy::balanced_http (
     default => $cluster_balancer,
   }
 
-  $tag= $balanced_port? {
+  $tag= $balancer_port? {
     '80'    => "cluster${cluster}_http_${balancer_cluster}",
-    default => "cluster${cluster}${balanced_port}_http_${balancer_cluster}"
+    default => "cluster${cluster}${balancer_port}_http_${balancer_cluster}"
   }
 
-  $hostname_suffix = $balanced_port? {
+  $hostname_suffix = $balancer_port? {
     '80'    => '',
-    default => "-${balanced_port}",
+    default => "-${balancer_port}",
   }
 
-  @@haproxy::backend::server { "${hostname}${hostname_suffix}":
-    bind          => inline_template("<%= ipaddress_${balanced_interface} %>"),
+  $port_suffix = $port?{
+    ''      => $port,
+    default => "-${port}",
+  }
+
+  $listen_address = $balanced_address? {
+    ''      => inline_template("<%= ipaddress_${balanced_interface} %>"),
+    default => $balanced_address,
+  }
+
+  @@haproxy::backend::server { "${hostname}${hostname_suffix}${port_suffix}":
+    bind          => $listen_address,
+    server_name   => $hostname,
     tag           => $tag,
     weight        => $weight,
     inter         => $inter,
@@ -92,5 +109,6 @@ define haproxy::balanced_http (
     rise          => $rise,
     fall          => $fall,
     backup        => $backup,
+    real_port     => $port,
   }
 }

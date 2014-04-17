@@ -68,9 +68,8 @@ define haproxy::backend::server (
     fail ("No Haproxy::Backend[$backend_name] is defined!")
   }
 
-
-  if ( $bind !~ /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}(:[0-9]{2,5})?$/) {
-    fail('bind must contain a valid ip address, eventually followeb by :port. Ex: 192.168.1.1:80 or 192.168.1.1')
+  if ( $bind !~ /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}(:[0-9]{2,5})?$/ ) and ( $bind !~ /.*\..+$/ ){
+    fail('bind must contain a valid ip or host address, eventually followeb by :port. Ex: 192.168.1.1:80 or 192.168.1.1 or example.com')
   }
 
   validate_bool($server_check)

@@ -110,7 +110,7 @@ define haproxy::http_balance (
   }
 
   $string_binds = inline_template('<% array_bind_addresses.each do |bind| -%><%= bind %> <% end -%>')
-  if $string_binds !~ /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\ )+$/ {
+  if ($string_binds !~ /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\ )+$/) and ($string_binds !~ /.*\..+$/) {
     fail('invalid ip_address:port value present in bind_addresses')
   }
 

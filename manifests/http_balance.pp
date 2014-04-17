@@ -136,6 +136,7 @@ define haproxy::http_balance (
   Haproxy::Backend::Server <<| tag == "${name}_${cluster}" |>> {
     backend_name        => $be_name,
     port                => $http_port,
+    inter               => '3s'
   }
   if $add_request_header != '' {
     create_resources(haproxy::backend::add_header, $add_request_header, {'backend_name' => $be_name, 'type' => 'req'})

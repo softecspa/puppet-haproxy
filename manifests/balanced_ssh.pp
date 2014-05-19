@@ -52,6 +52,7 @@ define haproxy::balanced_ssh (
   $cluster_balancer = '',
   $balanced_interface,
   $active_node      = '',
+  $port             = ''
 ) {
 
   if ($cluster == '') or ($cluster == undef) {
@@ -74,5 +75,6 @@ define haproxy::balanced_ssh (
     server_name => $hostname,
     tag         => "cluster${cluster}_ssh_${balancer_cluster}",
     backup      => $backup,
+    real_port   => $port
   }
 }

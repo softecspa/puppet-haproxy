@@ -121,6 +121,7 @@ define haproxy::frontend (
         true  => 'present',
         false => 'absent',
     },
+    order         => '10',
     file_name     => "haproxy_${frontend_name}.log",
     file_dir      => $haproxy::log_dir,
     template      => 'haproxy/rsyslog_facility_frontend.erb',

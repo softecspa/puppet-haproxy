@@ -3,5 +3,5 @@ $UDPServerAddress 127.0.0.1
 $UDPServerRun 514
 
 
-if $programname == 'haproxy' then <%= logdir -%>/<%= log_file %>
+if $programname == 'haproxy' then <%= @file_name %>
 & ~

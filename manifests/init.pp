@@ -159,12 +159,13 @@ class haproxy (
   }
 
   if $log_dir != '' {
-    rsyslog::facility { '11-haproxy':
-      log_file      => "haproxy.log",
-      logdir        => $log_dir,
-      file_template => 'haproxy/rsyslog_facility.erb',
-      create        => '644 syslog adm',
-      logrotate     => false
+    softec_rsyslog::imfile {'haproxy':
+      file_name => 'haproxy.log',
+      file_dir  => $log_dir,
+      order     => '11',
+      file_tag  => 'haproxy',
+      template  => 'haproxy/rsyslog_facility.erb',
+      logrotate => false,
     }
     include haproxy::logrotate
   }

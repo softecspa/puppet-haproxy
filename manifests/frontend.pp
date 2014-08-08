@@ -116,15 +116,15 @@ define haproxy::frontend (
     }
   }
 
-  rsyslog::facility { "10-haproxy_${frontend_name}":
+  softec_rsyslog::imfile { "haproxy_${frontend_name}":
     ensure        => $own_logfile ? {
         true  => 'present',
         false => 'absent',
     },
-    log_file      => "haproxy_${frontend_name}.log",
-    logdir        => $haproxy::log_dir,
-    file_template => 'haproxy/rsyslog_facility_frontend.erb',
+    file_name     => "haproxy_${frontend_name}.log",
+    file_dir      => $haproxy::log_dir,
+    template      => 'haproxy/rsyslog_facility_frontend.erb',
     logrotate     => false,
-    rsyslog_tag   => $frontend_name,
+    file_tag      => $frontend_name,
   }
 }

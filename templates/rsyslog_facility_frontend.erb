@@ -1,2 +1,2 @@
-if $programname == 'haproxy' and $msg contains '<%= rsyslog_tag -%>' then <%= logdir -%>/<%= log_file %>
+if $programname == 'haproxy' and $msg contains '<%= @file_tag -%>' then <%= @file_name %>
 & ~

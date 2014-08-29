@@ -51,14 +51,4 @@ define haproxy::ssh_balance (
     timeout_server        => $timeout_server,
   }
 
-  if !defined(Augeas['ssh_local_bind']) {
-    augeas { 'ssh_local_bind':
-      context => "/files/etc/ssh/sshd_config",
-      changes => [
-        "set ListenAddress $local_ip",
-      ],
-      notify  => Service['ssh']
-    }
-  }
-
 }

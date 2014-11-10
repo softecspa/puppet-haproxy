@@ -64,6 +64,7 @@ define haproxy::http_balance (
   $timeout_connect        = '',
   $timeout_client         = '',
   $timeout_server         = '300000',
+  $subnet_softec          = $::subnet_softec_array,
 ) {
 
   if (!is_hash($backends)) and ($backends != '') {
